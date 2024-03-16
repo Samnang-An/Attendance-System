@@ -23,6 +23,6 @@ public class Location implements Serializable {
   private long locationId;
   private String name;
   @Enumerated(EnumType.STRING)
-  private String type;
+  private LocationType type;
 
 }
