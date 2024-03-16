@@ -1,0 +1,135 @@
+version: '2'
+services:
+  config-server:
+    image: registry.gitlab.com/backbone4/micro-service/configuration-server:3b99b6c4
+    environment:
+      - GITHUB_REPO=https://github.com/Samnang-An/ConfigurationServer.git
+      - GITHUB_SUBFOLDER=Configurations
+    ports:
+      - 9000:9000
+    networks:
+      - backbone
+
+  service-discovery-1:
+    image: registry.gitlab.com/backbone4/micro-service/discovery-service:366409bd
+    environment:
+      - HOSTNAME=servicediscovery1.local
+      - DISCOVERY_URL=http://service-discovery-2:8762/eureka
+    ports:
+      - 8761:8761
+    networks:
+      - backbone
+    depends_on:
+      - config-server
+
+  service-discovery-2:
+    image: registry.gitlab.com/backbone4/micro-service/discovery-service:366409bd
+    environment:
+      - HOSTNAME=servicediscovery2.local
+      - DISCOVERY_URL=http://service-discovery-1:8761/eureka
+    ports:
+      - 8762:8761
+    networks:
+      - backbone
+    depends_on:
+      - config-server
+
+  zookeeper-1:
+    image: confluentinc/cp-zookeeper:7.4.4
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - 22181:2181
+    networks:
+      - backbone
+
+  zookeeper-2:
+    image: confluentinc/cp-zookeeper:7.4.4
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - 32181:2181
+    networks:
+      - backbone
+
+  kafka-1:
+    image: confluentinc/cp-kafka:7.4.4
+    depends_on:
+      - zookeeper-1
+      - zookeeper-2
+
+    ports:
+      - 29092:29092
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:2181,zookeeper-2:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-1:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    networks:
+      - backbone
+  kafka-2:
+    image: confluentinc/cp-kafka:7.4.4
+    depends_on:
+      - zookeeper-1
+      - zookeeper-2
+    ports:
+      - 39092:39092
+    environment:
+      KAFKA_BROKER_ID: 2
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:2181,zookeeper-2:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-2:9092,PLAINTEXT_HOST://localhost:39092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    networks:
+      - backbone
+
+  mysql:
+    image: mysql:latest
+    container_name: mysql_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: dbname
+      MYSQL_USER: miu
+      MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./data/mongo:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: miu
+      MONGO_INITDB_ROOT_PASSWORD: password
+
+  api-gateway:
+    image: registry.gitlab.com/backbone4/micro-service/api-gateway:9e65d22c
+    environment:
+      - DISCOVERY_URL=http://service-discovery-1:8761/eureka, http://service-discovery-2:8761/eureka
+    ports:
+      - 8080:8000
+    networks:
+      - backbone
+    depends_on:
+      service-discovery-1:
+        condition: service_healthy
+      service-discovery-2:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+
+networks:
+  backbone:
+    driver: bridge
