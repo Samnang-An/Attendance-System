@@ -4,24 +4,26 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDate;
-import java.time.LocalTime;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Session {
+public class Session implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long sessionId;
+  private static final long serialVersionUID = 1L;
 
-    private LocalDate sessionDate;
-    private LocalTime startTime;
-    private LocalTime endTime;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private long sessionId;
+
+  private LocalDate sessionDate;
+  private LocalTime startTime;
+  private LocalTime endTime;
 }

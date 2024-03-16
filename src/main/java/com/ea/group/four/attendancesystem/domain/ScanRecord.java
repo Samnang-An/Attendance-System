@@ -1,27 +1,33 @@
 package com.ea.group.four.attendancesystem.domain;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import java.io.Serializable;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class ScanRecord {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long recordId;
-    @ManyToOne
-    private Scanner scanner;
-    @ManyToOne
-    private Member member;
+public class ScanRecord implements Serializable {
 
-    private LocalDateTime scannedDateTime;
+  private static final long serialVersionUID = 1L;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private long recordId;
+  @ManyToOne
+  private Scanner scanner;
+  @ManyToOne
+  private Member member;
 
-    private  String status;
+  private LocalDateTime scannedDateTime;
+
+  private String status;
 
 }
