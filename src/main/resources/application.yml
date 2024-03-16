@@ -1,0 +1,33 @@
+common:
+  security:
+    enabled: false
+  feign-oauth:
+    enabled: false
+  mvc:
+    enabled: false
+server:
+  ssl:
+    enabled: false
+spring:
+  security:
+    user:
+      name: miu
+      password: password
+  application:
+    name: attendance-server
+  datasource:
+    url: jdbc:mysql://localhost:3306/attendance
+    username: miu
+    password: password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximumPoolSize: 10
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+logging:
+  level:
+    root: INFO
+  file:
+    name: ./data/log/Logging/${spring.application.name}/logs
