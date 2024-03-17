@@ -25,9 +25,13 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
 logging:
   level:
+    org:
+      springframework:
+        security: debug
+        web: DEBUG
     root: INFO
   file:
     name: ./data/log/Logging/${spring.application.name}/logs
