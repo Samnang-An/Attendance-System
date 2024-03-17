@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Session implements Serializable {
+public class ScheduleSession implements Serializable {
 
   private static final long serialVersionUID = 1L;
 

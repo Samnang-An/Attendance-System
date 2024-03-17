@@ -22,7 +22,7 @@ public class ScanRecord implements Serializable {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private long recordId;
   @ManyToOne
-  private Scanner scanner;
+  private BadgeScanner scanner;
   @ManyToOne
   private Member member;
 

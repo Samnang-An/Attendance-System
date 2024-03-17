@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Scanner implements Serializable {
+public class BadgeScanner implements Serializable {
 
   private static final long serialVersionUID = 1L;
   @Id
