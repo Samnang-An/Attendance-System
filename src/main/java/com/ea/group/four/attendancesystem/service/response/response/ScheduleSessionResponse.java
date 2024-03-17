@@ -6,7 +6,7 @@ import java.time.LocalTime;
 import lombok.Data;
 
 @Data
-public class SessionResponse implements Serializable {
+public class ScheduleSessionResponse implements Serializable {
 
   private static final long serialVersionUID = 1L;
   private long sessionId;

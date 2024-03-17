@@ -7,7 +7,7 @@ import java.io.Serializable;
 import lombok.Data;
 
 @Data
-public class ScannerResponse implements Serializable {
+public class BadgeScannerResponse implements Serializable {
 
   private static final long serialVersionUID = 1L;
   private long scannerId;
