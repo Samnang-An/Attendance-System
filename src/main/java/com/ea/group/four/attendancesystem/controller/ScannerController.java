@@ -17,12 +17,7 @@ public class ScannerController extends BaseReadWriteController<ScannerResponse, 
 
     @PostMapping
     public ResponseEntity<?> create(@RequestBody ScannerResponse request) {
-        try {
-            return ResponseEntity.ok(scannerService.create(request));
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Error: " + e.getMessage());
-        }
+        return response(() -> scannerService.create(request));
     }
 
     @DeleteMapping("/{id}")

@@ -6,6 +6,7 @@ import com.ea.group.four.attendancesystem.repository.ScannerRecordRepository;
 import com.ea.group.four.attendancesystem.repository.ScannerRepository;
 import com.ea.group.four.attendancesystem.service.ScannerService;
 import com.ea.group.four.attendancesystem.service.mapper.ScannerResponseToScannerMapper;
+import com.ea.group.four.attendancesystem.service.mapper.ScannerToScannerResponseMapper;
 import com.ea.group.four.attendancesystem.service.response.ScannerResponse;
 import edu.miu.common.exception.ResourceNotFoundException;
 import edu.miu.common.service.BaseReadWriteServiceImpl;
@@ -26,6 +27,9 @@ public class ScannerServiceImpl extends
     ScannerResponseToScannerMapper requestMapper;
 
     @Autowired
+    ScannerToScannerResponseMapper revertRequestMapper;
+
+    @Autowired
     ScannerRepository scannerRepository;
 
     @Autowired
@@ -36,7 +40,7 @@ public class ScannerServiceImpl extends
         Optional<Scanner> existingScanner = scannerRepository.findByEventAndLocationAndAccountType(scanner.getEvent(), scanner.getLocation(), scanner.getAccountType());
 
         if(existingScanner.isPresent()) {
-            throw new RuntimeException("A scanner with the same Event, Location, and Account Type already exists.");
+            return revertRequestMapper.map(existingScanner.get());
         }
 
         return convert(baseRepository.save(scanner));
