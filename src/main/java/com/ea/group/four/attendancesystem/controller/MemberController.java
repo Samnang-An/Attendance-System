@@ -16,7 +16,7 @@ public class MemberController extends BaseReadWriteController<MemberResponse, Me
     @Autowired
     private RoleService roleService;
 
-    @GetMapping("/members/{memeberId}/roles")
+    @GetMapping("/{memeberId}/roles")
     public String getRolesByMemberId(@PathVariable Long memberId) {
         return roleService.findById(memberId).toString();
     }
