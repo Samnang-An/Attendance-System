@@ -8,8 +8,6 @@ common:
 server:
   ssl:
     enabled: false
-  servlet:
-    context-path: /badge-system
 spring:
   security:
     user:

@@ -1,4 +1,4 @@
-package com.ea.group.four.attendancesystem.service.response.response;
+package com.ea.group.four.attendancesystem.service.response;
 
 import com.ea.group.four.attendancesystem.domain.Role;
 import java.io.Serializable;
