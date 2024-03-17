@@ -2,7 +2,7 @@ package com.ea.group.four.attendancesystem.service.impl;
 
 import com.ea.group.four.attendancesystem.domain.Location;
 import com.ea.group.four.attendancesystem.service.LocationService;
-import com.ea.group.four.attendancesystem.service.response.response.LocationResponse;
+import com.ea.group.four.attendancesystem.service.response.LocationResponse;
 import edu.miu.common.service.BaseReadWriteServiceImpl;
 import org.springframework.stereotype.Service;
 

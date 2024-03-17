@@ -8,7 +8,10 @@ common:
 server:
   ssl:
     enabled: false
+<<<<<<< HEAD
 
+=======
+>>>>>>> e6f1676 (fix: wrong mapper)
 spring:
   security:
     user:
