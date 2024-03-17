@@ -1,7 +1,7 @@
-package com.ea.group.four.attendancesystem.service.response.response;
+package com.ea.group.four.attendancesystem.service.response;
 
 import com.ea.group.four.attendancesystem.domain.Member;
-import com.ea.group.four.attendancesystem.domain.BadgeScanner;
+import com.ea.group.four.attendancesystem.domain.Scanner;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import lombok.Data;
@@ -11,7 +11,7 @@ public class ScanRecordResponse implements Serializable {
 
   private static final long serialVersionUID = 1L;
   private long recordId;
-  private BadgeScanner scanner;
+  private Scanner scanner;
   private Member member;
   private LocalDateTime scannedDateTime;
   private String status;

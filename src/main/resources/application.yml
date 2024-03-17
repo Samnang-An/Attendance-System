@@ -8,7 +8,6 @@ common:
 server:
   ssl:
     enabled: false
-
 spring:
   security:
     user:
