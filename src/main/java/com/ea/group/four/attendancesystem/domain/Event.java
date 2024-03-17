@@ -30,7 +30,7 @@ public class Event implements Serializable {
   private String occurEvent;
 
   @OneToMany
-  private List<ScheduleSession> sessions = new ArrayList<>();
+  private List<Session> sessions = new ArrayList<>();
 
   @OneToMany
   private List<Member> members = new ArrayList<>();
