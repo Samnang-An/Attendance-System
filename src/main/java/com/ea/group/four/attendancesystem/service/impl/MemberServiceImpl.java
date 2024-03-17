@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 public class MemberServiceImpl extends
     BaseReadWriteServiceImpl<MemberResponse, Member, Long> implements
     MemberService {
-    @Autowired
-    private MemberRepository memberRepository;
+
 
 }
