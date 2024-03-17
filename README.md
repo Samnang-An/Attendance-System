@@ -29,3 +29,8 @@ Attendance System for Enterprise Architecture
     - username: admin
     - password: admin
     - port: 61616
+
+## API Documentation
+- [Role](http://localhost:8080/badge-system/roles)
+- - username: miu
+- - password: password
