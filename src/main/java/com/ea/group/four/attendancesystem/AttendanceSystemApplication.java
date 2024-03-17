@@ -5,8 +5,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
-@SpringBootApplication
-@ComponentScan({"com.ea.group.four.attendancesystem","edu.miu.common"})
+
+@SpringBootApplication(scanBasePackages = {"edu.miu.common", "com.ea.group.four.attendancesystem"})
 public class AttendanceSystemApplication {
 
   public static void main(String[] args) {
