@@ -2,7 +2,7 @@ package com.ea.group.four.attendancesystem.controller;
 
 import com.ea.group.four.attendancesystem.domain.Scanner;
 import com.ea.group.four.attendancesystem.service.ScannerService;
-import com.ea.group.four.attendancesystem.service.response.response.ScannerResponse;
+import com.ea.group.four.attendancesystem.service.response.ScannerResponse;
 import edu.miu.common.controller.BaseReadWriteController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
