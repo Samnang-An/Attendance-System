@@ -1,6 +1,7 @@
 package com.ea.group.four.attendancesystem.domain;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -20,9 +21,9 @@ public class MemberAccount implements Serializable {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private long memberAccountId;
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   private Member member;
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   private Account account;
   private int defaultBalance;
   private boolean enabled;
