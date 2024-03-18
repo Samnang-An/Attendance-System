@@ -27,6 +27,11 @@ jobs:
         java-version: '21'
         distribution: 'temurin'
         cache: maven
+    - name: maven-settings
+      uses: s4u/maven-settings-action@v3.0.0
+      with:
+          servers: '[{"id": "${REPO_ID}", "username": "${REPO_USERNAME}", "password": "${REPO_TOKEN}"}]'
+          githubServer: false
     - name: Build with Maven
       run: mvn -B package --file pom.xml
 
