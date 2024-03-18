@@ -1,8 +1,4 @@
 package com.ea.group.four.attendancesystem;
-
-import com.ea.group.four.attendancesystem.repository.MemberRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
