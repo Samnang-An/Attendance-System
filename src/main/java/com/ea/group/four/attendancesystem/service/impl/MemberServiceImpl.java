@@ -4,6 +4,7 @@ import com.ea.group.four.attendancesystem.domain.Member;
 import com.ea.group.four.attendancesystem.domain.Role;
 import com.ea.group.four.attendancesystem.domain.ScanRecord;
 import com.ea.group.four.attendancesystem.repository.MemberRepository;
+import com.ea.group.four.attendancesystem.repository.RoleRepository;
 import com.ea.group.four.attendancesystem.repository.ScannerRecordRepository;
 import com.ea.group.four.attendancesystem.service.MemberService;
 import com.ea.group.four.attendancesystem.service.mapper.RoleToRoleResponseMapper;
@@ -29,6 +30,8 @@ public class MemberServiceImpl extends
     @Autowired
     private MemberRepository memberRepository;
     @Autowired
+    private RoleRepository roleRepository;
+    @Autowired
     private RoleToRoleResponseMapper roleToRoleResponseMapper;
     @Override
     public List<ScanRecord> getMemberAttendance(Long memberId) {
@@ -41,7 +44,7 @@ public class MemberServiceImpl extends
     }
 
     @Override
-    public List<RoleResponse> GetRolesByMemberId(Long memberId) {
+    public List<RoleResponse> getRolesByMemberId(Long memberId) {
       Optional<Member> member=  memberRepository.findById(memberId);
       if (member.isPresent()) {
           List<RoleResponse> roleResponses = new ArrayList<>();
@@ -52,4 +55,50 @@ public class MemberServiceImpl extends
       }
         return null;
     }
+
+    @Override
+    public void addRoleByMemberId(Long memberId, Long roleId) {
+        Optional<Member> memberOptional= memberRepository.findById(memberId);
+        Optional<Role> roleOptional= roleRepository.findById(roleId);
+        if(memberOptional.isPresent() && roleOptional.isPresent()){
+            Member member= memberOptional.get();
+            Role role= roleOptional.get();
+            //Add the role to the member if it does not exist
+            if (!member.getRoles().contains(role)) {
+                member.getRoles().add(role);
+                memberRepository.save(member);
+            }
+        }
+    }
+
+    @Override
+    public void deleteRoleByMemberIdAndRoleId(Long memberId, Long roleId) {
+        Optional<Member> memberOptional= memberRepository.findById(memberId);
+        if(memberOptional.isPresent()){
+            Member member= memberOptional.get();
+            //Remove the role from the member if it exists
+            member.getRoles().removeIf(role -> role.getRoleId()==roleId);
+            memberRepository.save(member);
+        }
+    }
+
+    @Override
+    public void updateRoleByMemberIdAndRoleId(Long memberId, Long roleId, RoleResponse roleResponse) {
+        Optional<Member> memberOptional= memberRepository.findById(memberId);
+        if(memberOptional.isPresent()){
+            Member member=memberOptional.get();
+            // Find the role to update
+            for(Role role: member.getRoles()){
+                if(role.getRoleId()==roleId){
+                    role.setName(roleResponse.getName());
+                    //Save the updated role to the database
+                    roleRepository.save(role);
+                    break;
+                }
+            }
+        }
+
+    }
+
+
 }
