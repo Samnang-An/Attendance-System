@@ -1,11 +1,7 @@
 package com.ea.group.four.attendancesystem.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +24,7 @@ public class Member implements Serializable {
   private String lastName;
   private String barcode;
   private String email;
-  @OneToMany
+  @OneToMany(cascade = CascadeType.PERSIST)
   @JoinTable(name = "Member_Role")
   private List<Role> roles = new ArrayList<>();
 
