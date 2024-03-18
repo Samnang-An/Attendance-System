@@ -1,10 +1,8 @@
 package com.ea.group.four.attendancesystem.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -29,8 +27,6 @@ public class Event implements Serializable {
   private LocalDate endDate;
   private String occurEvent;
 
-  @OneToMany
-  private List<Session> sessions = new ArrayList<>();
 
   @OneToMany
   private List<Member> members = new ArrayList<>();

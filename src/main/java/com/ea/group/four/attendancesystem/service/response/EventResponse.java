@@ -19,6 +19,5 @@ public class EventResponse implements Serializable {
   private LocalDate endDate;
   private String occurEvent;
 
-  private List<Session> sessions = new ArrayList<>();
   private List<Member> members = new ArrayList<>();
 }
