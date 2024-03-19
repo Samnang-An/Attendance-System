@@ -9,5 +9,5 @@ public interface ScannerRecordService extends
     BaseReadWriteService<ScanRecordResponse, ScanRecord, Long> {
 
   List<ScanRecordResponse> findByAccountBetweenDates(String accountName, String fromDate, String toDate);
-
+  public ScanRecordResponse customDelete(Long Id);
 }

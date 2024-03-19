@@ -6,7 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Data
 @Builder
@@ -17,7 +19,8 @@ public class ScanRecordDTO implements Serializable {
   private String name;
   private String barcode;
   private String email;
-  private LocalDateTime scannedDateTime;
+  private LocalDate scannedDate;
+  private LocalTime scannedTime;
   private String status;
 
 
@@ -28,7 +31,8 @@ public class ScanRecordDTO implements Serializable {
             .name(scanRecord.getMember().getFirstName() +" "+ scanRecord.getMember().getLastName())
 //            .lastName(scanRecord.getMember().getLastName())
             .email(scanRecord.getMember().getEmail())
-            .scannedDateTime(scanRecord.getScannedDateTime())
+            .scannedTime(scanRecord.getScannedTime())
+            .scannedDate(scanRecord.getScannedDate())
             .status(scanRecord.getStatus())
             .build();
   }

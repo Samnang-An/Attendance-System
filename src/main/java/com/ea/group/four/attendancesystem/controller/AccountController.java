@@ -16,15 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/accounts")
 public class AccountController extends BaseReadWriteController<AccountResponse, Account, Long> {
 
-  @Autowired
-  ScannerRecordService scannerRecordService;
 
-  @GetMapping("/{accountId}/attendance/{fromDate}/{toDate}")
-  ResponseEntity<?> getAttendanceByAccountBetween(@PathVariable String accountName,
-      @PathVariable String fromDate, @PathVariable String toDate) {
-    List<ScanRecordResponse> recordByAccountBetweenDates = scannerRecordService.findByAccountBetweenDates(
-        accountName, fromDate, toDate);
-    return ResponseEntity.ok().body(recordByAccountBetweenDates);
-  }
 
 }
