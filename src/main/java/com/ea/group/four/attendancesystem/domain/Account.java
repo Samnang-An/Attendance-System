@@ -5,12 +5,8 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,8 +27,4 @@ public class Account implements Serializable {
 
     @OneToOne(fetch = FetchType.LAZY)
     private AccountType accountType;
-
-    @OneToMany
-    @JoinTable(name = "Account_Role")
-    private List<Role> roles = new ArrayList<>();
 }

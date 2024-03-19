@@ -27,5 +27,4 @@ public class AccountController extends BaseReadWriteController<AccountResponse, 
     return ResponseEntity.ok().body(recordByAccountBetweenDates);
   }
 
-
 }
