@@ -1,7 +1,5 @@
 package com.ea.group.four.attendancesystem.controller;
-
 import com.ea.group.four.attendancesystem.domain.Account;
-import com.ea.group.four.attendancesystem.domain.ScanRecord;
 import com.ea.group.four.attendancesystem.service.ScannerRecordService;
 import com.ea.group.four.attendancesystem.service.response.AccountResponse;
 import com.ea.group.four.attendancesystem.service.response.ScanRecordResponse;
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/accounts")
 public class AccountController extends BaseReadWriteController<AccountResponse, Account, Long> {
-
 
 
 

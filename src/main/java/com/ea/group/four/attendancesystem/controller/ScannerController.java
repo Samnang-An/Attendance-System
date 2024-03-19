@@ -17,6 +17,9 @@ public class ScannerController extends BaseReadWriteController<ScannerResponse, 
     @Autowired
     ScannerService scannerService;
 
+    @Autowired
+    private ScannerRecordService scannerRecordService;
+
     @PostMapping
     public ResponseEntity<?> create(@RequestBody ScannerResponse request) {
         return response(() -> scannerService.create(request));
@@ -34,20 +37,20 @@ public class ScannerController extends BaseReadWriteController<ScannerResponse, 
     }
 
 
-    @Autowired
-    private ScannerRecordService scannerRecordService;
 
     @PostMapping("/{scannerCode}/records")
-    public ScanRecordResponse create(@PathVariable Long scannerCode,
+    public ResponseEntity<?> createScannerRecord(@PathVariable Long scannerCode,
                                     @RequestBody ScanRecordResponse request) {
         request.getScanner().setScannerId(scannerCode);
-        return scannerRecordService.create(request);
+        return ResponseEntity.ok(scannerRecordService.create(request));
     }
 
     @DeleteMapping("/id")
-    public ScanRecordResponse customDelete(@PathVariable Long id){
-        return scannerRecordService.customDelete(id);
+    public ResponseEntity<?> customDelete(@PathVariable Long id){
+        return ResponseEntity.ok(scannerRecordService.customDelete(id));
     }
+
+
 
 
 }
