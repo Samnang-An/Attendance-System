@@ -5,23 +5,18 @@ import com.ea.group.four.attendancesystem.domain.Member;
 import com.ea.group.four.attendancesystem.service.EventService;
 import com.ea.group.four.attendancesystem.service.response.EventResponse;
 import edu.miu.common.controller.BaseReadWriteController;
+
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/events")
 public class EventController extends BaseReadWriteController<EventResponse, Event, Long> {
-
 
     @Autowired
     private EventService eventService;

@@ -1,13 +1,13 @@
 package com.ea.group.four.attendancesystem.service.impl;
 
-import com.ea.group.four.attendancesystem.domain.Account;
 import com.ea.group.four.attendancesystem.domain.Member;
-import com.ea.group.four.attendancesystem.domain.Role;
 import com.ea.group.four.attendancesystem.domain.ScanRecord;
 import com.ea.group.four.attendancesystem.repository.MemberRepository;
 import com.ea.group.four.attendancesystem.repository.RoleRepository;
 import com.ea.group.four.attendancesystem.repository.ScannerRecordRepository;
 import com.ea.group.four.attendancesystem.service.MemberService;
+import com.ea.group.four.attendancesystem.service.mapper.ScannerRecordToScannerRecordResponseMapper;
+import com.ea.group.four.attendancesystem.service.response.ScanRecordDTO;
 import com.ea.group.four.attendancesystem.service.RoleService;
 import com.ea.group.four.attendancesystem.service.mapper.RoleResponseToRoleMapper;
 import com.ea.group.four.attendancesystem.service.mapper.RoleToRoleResponseMapper;
@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,6 +33,10 @@ public class MemberServiceImpl extends
 
     @Autowired
     private MemberRepository memberRepository;
+
+    @Autowired
+    ScannerRecordToScannerRecordResponseMapper scannerRecordMapper;
+
     @Autowired
     private RoleRepository roleRepository;
     @Autowired
@@ -40,6 +45,7 @@ public class MemberServiceImpl extends
     private RoleResponseToRoleMapper roleResponseToRoleMapper;
     @Autowired
     private RoleService roleService;
+
     @Override
     public List<ScanRecord> getMemberAttendance(Long memberId) {
         Optional<Member> member = memberRepository.findById(memberId);
@@ -51,6 +57,21 @@ public class MemberServiceImpl extends
     }
 
     @Override
+    public List<ScanRecordDTO> getMemberAttendanceForEvent(Long memberId, Long eventId) {
+        List<ScanRecord> scanRecordList = scanRecordRepository.findByMemberAndEvent(memberId,eventId);
+        if(scanRecordList.isEmpty()){
+            return Collections.emptyList();
+        }
+        List<ScanRecordDTO> scanRecordResponseList = new ArrayList<>();
+        for (ScanRecord record : scanRecordList) {
+            scanRecordResponseList.add(ScanRecordDTO.of(record));
+        }
+        return scanRecordResponseList;
+
+    }
+
+
+
     public List<RoleResponse> getRolesByMemberId(Long memberId) {
       return findById(memberId).getRoles();
     }

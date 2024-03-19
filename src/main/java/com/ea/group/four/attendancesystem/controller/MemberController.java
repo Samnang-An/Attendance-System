@@ -2,6 +2,7 @@ package com.ea.group.four.attendancesystem.controller;
 import com.ea.group.four.attendancesystem.domain.Member;
 import com.ea.group.four.attendancesystem.service.RoleService;
 import com.ea.group.four.attendancesystem.service.response.MemberResponse;
+import com.ea.group.four.attendancesystem.service.response.ScanRecordDTO;
 import com.ea.group.four.attendancesystem.service.response.RoleResponse;
 import edu.miu.common.controller.BaseReadWriteController;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,14 @@ public class MemberController extends BaseReadWriteController<MemberResponse, Me
         List<ScanRecord> scanRecords = memberService.getMemberAttendance(memberId);
         return ResponseEntity.ok(scanRecords);
     }
+
+    @GetMapping("/{memberId}/events/{eventId}/attendance")
+    public ResponseEntity<?> getMemberAttendanceForEvent(@PathVariable Long memberId, @PathVariable Long eventId){
+        List<ScanRecordDTO> scanRecordResponseList =  memberService.getMemberAttendanceForEvent(memberId,eventId);
+        return  ResponseEntity.ok(scanRecordResponseList);
+    }
+
+
     @PostMapping("/{memberId}/roles/{roleId}")
     public ResponseEntity<?> addRoleByMemberId(@PathVariable Long memberId, @ PathVariable Long roleId){
         try{
