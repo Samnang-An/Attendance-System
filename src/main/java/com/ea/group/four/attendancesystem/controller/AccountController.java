@@ -1,7 +1,5 @@
 package com.ea.group.four.attendancesystem.controller;
-
 import com.ea.group.four.attendancesystem.domain.Account;
-import com.ea.group.four.attendancesystem.domain.ScanRecord;
 import com.ea.group.four.attendancesystem.service.ScannerRecordService;
 import com.ea.group.four.attendancesystem.service.response.AccountResponse;
 import com.ea.group.four.attendancesystem.service.response.ScanRecordResponse;
@@ -28,6 +26,5 @@ public class AccountController extends BaseReadWriteController<AccountResponse, 
         accountName, fromDate, toDate);
     return ResponseEntity.ok().body(recordByAccountBetweenDates);
   }
-
 
 }

@@ -31,3 +31,8 @@ logging:
     root: INFO
   file:
     name: ./data/log/Logging/${spring.application.name}/logs
+
+alert:
+  msg:
+    cron:
+      job: 0/20 * * * * ?

@@ -1,7 +1,7 @@
 package com.ea.group.four.attendancesystem.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.*;
 
 import java.io.Serializable;
