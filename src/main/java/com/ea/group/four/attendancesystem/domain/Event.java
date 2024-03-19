@@ -34,6 +34,8 @@ public class Event implements Serializable {
   @Transient
   private Map<String,List<String>> schedule  = new HashMap<>();
 
+
+
   @ManyToMany(fetch = FetchType.LAZY)
 
   private Set<Member> members;

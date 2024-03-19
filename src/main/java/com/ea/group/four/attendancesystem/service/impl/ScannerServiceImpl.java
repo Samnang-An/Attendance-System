@@ -1,5 +1,6 @@
 package com.ea.group.four.attendancesystem.service.impl;
 
+import com.ea.group.four.attendancesystem.domain.Event;
 import com.ea.group.four.attendancesystem.domain.ScanRecord;
 import com.ea.group.four.attendancesystem.domain.Scanner;
 import com.ea.group.four.attendancesystem.repository.ScannerRecordRepository;
@@ -56,5 +57,13 @@ public class ScannerServiceImpl extends
         }
 
         baseRepository.delete(scanner);
+    }
+
+
+
+
+    @Override
+    public List<Scanner> getEventScanners(Event event) {
+        return scannerRepository.findAllScannersByEvent(event);
     }
 }

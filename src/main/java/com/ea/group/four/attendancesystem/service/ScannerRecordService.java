@@ -10,4 +10,6 @@ public interface ScannerRecordService extends
 
   List<ScanRecordResponse> findByAccountBetweenDates(String accountName, String fromDate, String toDate);
   public ScanRecordResponse customDelete(Long Id);
+
+
 }

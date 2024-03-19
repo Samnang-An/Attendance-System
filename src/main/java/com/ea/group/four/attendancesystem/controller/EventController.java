@@ -4,6 +4,7 @@ import com.ea.group.four.attendancesystem.domain.Event;
 import com.ea.group.four.attendancesystem.domain.Member;
 import com.ea.group.four.attendancesystem.service.EventService;
 import com.ea.group.four.attendancesystem.service.response.EventResponse;
+import com.ea.group.four.attendancesystem.service.response.ScanRecordResponse;
 import edu.miu.common.controller.BaseReadWriteController;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -42,5 +43,16 @@ public class EventController extends BaseReadWriteController<EventResponse, Even
 
     }
 
+    @GetMapping("{eventId}/attendance")
+    public ResponseEntity<?> getAttendanceOfEvent(@PathVariable Long eventId){
+        try {
+            List<ScanRecordResponse> eventAttendance = eventService.calculateAttendanceOfEvent(eventId);
+            return ResponseEntity.ok(eventAttendance);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding members to event: " + e.getMessage());
+        }
 
+    }
 }

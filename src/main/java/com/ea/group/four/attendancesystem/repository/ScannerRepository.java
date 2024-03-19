@@ -8,6 +8,7 @@ import edu.miu.common.repository.BaseRepository;
 import feign.Param;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ScannerRepository extends BaseRepository<Scanner, Long> {
@@ -17,4 +18,10 @@ public interface ScannerRepository extends BaseRepository<Scanner, Long> {
             @Param("location") Location location,
             @Param("accountType") AccountType accountType
     );
+
+    @Query("SELECT s From Scanner s WHERE s.event =:event")
+    List<Scanner> findAllScannersByEvent(
+            @Param("event") Event event
+    );
+
 }
