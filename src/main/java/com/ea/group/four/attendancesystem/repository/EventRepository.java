@@ -9,6 +9,5 @@ import java.util.List;
 public interface EventRepository extends BaseRepository<Event, Long> {
 
 
-
-
+    Event findByEventId(long eventId);
 }

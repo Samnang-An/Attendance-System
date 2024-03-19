@@ -6,6 +6,8 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
 import lombok.Data;
 
 @Data
@@ -17,8 +19,8 @@ public class EventResponse implements Serializable {
   private String description;
   private LocalDate startDate;
   private LocalDate endDate;
-  private String occurEvent;
 
-  private List<Session> sessions = new ArrayList<>();
+  private Map<String,List<String>> schedule;
+
   private List<Member> members = new ArrayList<>();
 }

@@ -1,17 +1,22 @@
 package com.ea.group.four.attendancesystem.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
+
+import javax.swing.plaf.synth.SynthTreeUI;
 
 @Data
 @NoArgsConstructor
@@ -27,13 +32,17 @@ public class Event implements Serializable {
   private String description;
   private LocalDate startDate;
   private LocalDate endDate;
-  private String occurEvent;
 
-  @OneToMany
-  private List<Session> sessions = new ArrayList<>();
 
-  @OneToMany
-  private List<Member> members = new ArrayList<>();
+  @Transient
+  private Map<String,List<String>> schedule  = new HashMap<>();
+
+  @ManyToMany(fetch = FetchType.LAZY)
+
+  private List<Member> members;
+
+
+
 
 }
 
