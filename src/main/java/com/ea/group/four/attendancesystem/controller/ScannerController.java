@@ -36,8 +36,6 @@ public class ScannerController extends BaseReadWriteController<ScannerResponse, 
         }
     }
 
-
-
     @PostMapping("/{scannerCode}/records")
     public ResponseEntity<?> createScannerRecord(@PathVariable Long scannerCode,
                                     @RequestBody ScanRecordResponse request) {
@@ -45,7 +43,7 @@ public class ScannerController extends BaseReadWriteController<ScannerResponse, 
         return ResponseEntity.ok(scannerRecordService.create(request));
     }
 
-    @DeleteMapping("/id")
+    @DeleteMapping("/{id}/records")
     public ResponseEntity<?> customDelete(@PathVariable Long id){
         return ResponseEntity.ok(scannerRecordService.customDelete(id));
     }
