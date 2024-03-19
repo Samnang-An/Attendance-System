@@ -16,6 +16,6 @@ public class MemberResponse implements Serializable {
   private String lastName;
   private String barcode;
   private String email;
-  private List<Role> roles = new ArrayList<>();
+  private List<RoleResponse> roles = new ArrayList<>();
 
 }

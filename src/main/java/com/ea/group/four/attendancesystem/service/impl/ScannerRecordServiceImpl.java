@@ -1,6 +1,6 @@
 package com.ea.group.four.attendancesystem.service.impl;
 
-import com.ea.group.four.attendancesystem.domain.*;
+import com.ea.group.four.attendancesystem.domain.ScanRecord;
 import com.ea.group.four.attendancesystem.repository.ScannerRecordRepository;
 import com.ea.group.four.attendancesystem.service.ScannerRecordService;
 import com.ea.group.four.attendancesystem.service.response.ScanRecordResponse;
@@ -30,6 +30,7 @@ public class ScannerRecordServiceImpl extends
       String toDateString) {
     return convert(scannerRecordRepository.findByScannerAndScannedDateTimeBetween(
         accountName,
-        fromDateString, toDateString));
+        fromDateString,
+        toDateString));
   }
 }

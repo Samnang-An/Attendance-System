@@ -6,4 +6,5 @@ import edu.miu.common.repository.BaseRepository;
 
 public interface MemberRepository extends BaseRepository<Member, Long> {
 
+
 }

@@ -6,4 +6,6 @@ import edu.miu.common.service.BaseReadWriteService;
 
 public interface AccountService extends BaseReadWriteService<AccountResponse, Account, Long> {
 
+
+
 }

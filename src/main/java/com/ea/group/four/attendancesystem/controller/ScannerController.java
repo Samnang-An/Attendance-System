@@ -30,4 +30,6 @@ public class ScannerController extends BaseReadWriteController<ScannerResponse, 
                     .body("Error: " + e.getMessage());
         }
     }
+
+
 }
