@@ -21,8 +21,8 @@ public class MemberController extends BaseReadWriteController<MemberResponse, Me
     @Autowired
     MemberService memberService;
 
-    @GetMapping("/{memeberId}/roles")
-    public ResponseEntity<?> getRolesByMemberId(@PathVariable Long memberId) {
+    @GetMapping("/{memberId}/roles")
+    public ResponseEntity<?> getRolesByMemberId(@PathVariable long memberId) {
         List<RoleResponse> roles=memberService.getRolesByMemberId(memberId);
         if(roles!=null)
             return ResponseEntity.ok(roles);
@@ -54,7 +54,8 @@ public class MemberController extends BaseReadWriteController<MemberResponse, Me
         }
     }
     @PutMapping("/{memberId}/roles/{roleId}")
-    public ResponseEntity<?> updateRoleByMemberIdAndRoleId(@PathVariable Long memberId, @PathVariable Long roleId, @RequestBody RoleResponse roleResponse){
+    public ResponseEntity<?> updateRoleByMemberIdAndRoleId(@PathVariable Long memberId, @PathVariable Long roleId,
+                                                           @RequestBody RoleResponse roleResponse){
         try{
             memberService.updateRoleByMemberIdAndRoleId(memberId, roleId, roleResponse);
             return ResponseEntity.ok("Role updated successfully");

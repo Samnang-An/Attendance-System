@@ -11,4 +11,5 @@ public class AccountTypeServiceImpl extends
     BaseReadWriteServiceImpl<AccountTypeResponse, AccountType, Long> implements
     AccountTypeService {
 
+
 }

@@ -5,7 +5,6 @@ import com.ea.group.four.attendancesystem.domain.ScanRecord;
 import com.ea.group.four.attendancesystem.service.response.MemberResponse;
 import com.ea.group.four.attendancesystem.service.response.RoleResponse;
 import edu.miu.common.service.BaseReadWriteService;
-
 import java.util.List;
 
 public interface MemberService extends BaseReadWriteService<MemberResponse, Member, Long> {
