@@ -1,5 +1,9 @@
 package com.ea.group.four.attendancesystem.domain;
 
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -28,5 +32,8 @@ public class Member implements Serializable {
   @JoinTable(name = "Member_Role")
   private List<Role> roles = new ArrayList<>();
 
+  @ManyToMany(mappedBy = "members")
+  @JsonIgnore
+  private List<Event> events;
 
 }

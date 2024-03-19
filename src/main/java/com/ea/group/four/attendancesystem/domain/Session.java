@@ -1,9 +1,7 @@
 package com.ea.group.four.attendancesystem.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -26,4 +24,9 @@ public class Session implements Serializable {
   private LocalDate sessionDate;
   private LocalTime startTime;
   private LocalTime endTime;
+
+  @ManyToOne
+  @JoinColumn(name = "event_id")
+  private Event event;
+
 }

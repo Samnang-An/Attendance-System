@@ -16,7 +16,7 @@ public class WebSecurity {
     return http
         .csrf(c -> c.disable())
         .authorizeHttpRequests(authorize -> authorize
-            .requestMatchers("/swagger-ui/**", "/account-types/**").permitAll()
+            .requestMatchers("/swagger-ui/**", "/account-types/**","/events/**").permitAll()
             .anyRequest().authenticated()
         )
         .httpBasic(Customizer.withDefaults())

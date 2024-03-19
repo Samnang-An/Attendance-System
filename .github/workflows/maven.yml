@@ -44,5 +44,6 @@ jobs:
           servers: '[{"id": "${{ secrets.REPO_ID }}", "username": "${{ secrets.REPO_USERNAME }}", "password": "${{ secrets.REPO_TOKEN }}"}]'
           githubServer: false
 
+
       - name: Build with Maven
         run: mvn -B package --file pom.xml
