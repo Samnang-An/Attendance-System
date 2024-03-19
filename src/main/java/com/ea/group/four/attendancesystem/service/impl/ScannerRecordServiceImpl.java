@@ -1,19 +1,21 @@
 package com.ea.group.four.attendancesystem.service.impl;
 
-import com.ea.group.four.attendancesystem.domain.Event;
 import com.ea.group.four.attendancesystem.domain.ScanRecord;
-import com.ea.group.four.attendancesystem.domain.Scanner;
-import com.ea.group.four.attendancesystem.domain.Session;
+import com.ea.group.four.attendancesystem.exception.InvalidSessionException;
 import com.ea.group.four.attendancesystem.repository.ScannerRecordRepository;
+import com.ea.group.four.attendancesystem.service.MemberAccountService;
 import com.ea.group.four.attendancesystem.service.ScannerRecordService;
+import com.ea.group.four.attendancesystem.service.SessionService;
 import com.ea.group.four.attendancesystem.service.mapper.ScannerRecordResponseToScannerRecordMapper;
 import com.ea.group.four.attendancesystem.service.mapper.ScannerRecordToScannerRecordResponseMapper;
+import com.ea.group.four.attendancesystem.service.response.EventResponse;
+import com.ea.group.four.attendancesystem.service.response.MemberAccountResponse;
 import com.ea.group.four.attendancesystem.service.response.ScanRecordResponse;
+import com.ea.group.four.attendancesystem.service.response.SessionResponse;
 import edu.miu.common.exception.ResourceNotFoundException;
 import edu.miu.common.service.BaseReadWriteServiceImpl;
 import java.util.List;
-import java.util.Optional;
-
+import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import ma.glasnost.orika.MapperFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +24,8 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 public class ScannerRecordServiceImpl extends
-    BaseReadWriteServiceImpl<ScanRecordResponse, ScanRecord, Long> implements
-    ScannerRecordService {
+        BaseReadWriteServiceImpl<ScanRecordResponse, ScanRecord, Long> implements
+        ScannerRecordService {
 
   @Autowired
   ScannerRecordRepository scannerRecordRepository;
@@ -37,48 +39,61 @@ public class ScannerRecordServiceImpl extends
   @Autowired
   ScannerRecordToScannerRecordResponseMapper revertRequestMapper;
 
+  @Autowired
+  SessionService sessionService;
+
+  @Autowired
+  MemberAccountService memberAccountService;
+
   @Override
   public List<ScanRecordResponse> findByAccountBetweenDates(String accountName,
-      String fromDateString,
-      String toDateString) {
+                                                            String fromDateString,
+                                                            String toDateString) {
     return convert(scannerRecordRepository.findByScannerAndScannedDateTimeBetween(
-        accountName,
-        fromDateString,
-        toDateString));
+            accountName,
+            fromDateString,
+            toDateString));
   }
 
-  public ScanRecordResponse create(ScanRecordResponse request) {
-    ScanRecord scanRecord = requestMapper.customMap(request);
-    Scanner scanner = scanRecord.getScanner();
-    Event currentEvent = scanner.getEvent();
-//    Session session = currentEvent.getSessions().stream()
-//            .filter(s -> s.getSessionDate().isEqual(scanRecord.getScannedDate()))
-//            .filter(s -> s.getStartTime().compareTo(scanRecord.getScannedTime()) <= 0)
-//            .filter(s -> s.getEndTime().compareTo(scanRecord.getScannedTime()) >= 0)
-//            .findFirst().orElse(null);
-
-    Session session = new Session();
-    Optional<ScanRecord> existingRecord = scannerRecordRepository.findExistingRecord(
-            scanRecord.getMember(), session.getSessionDate(),
-            session.getStartTime(), session.getEndTime());
-
-    // When a record is existed in the session of the event
-    if(!existingRecord.isPresent()) {
-      // If already checked out -> return existingRecord
-      if(existingRecord.get().getStatus().equals("Check Out")) {
-        return revertRequestMapper.map(existingRecord.get());
-      }
-      // If status is check in -> update status of existing record to checkout
-      existingRecord.get().setStatus("Check Out");
-      existingRecord.get().setScannedTime(scanRecord.getScannedTime());
-      return convert(baseRepository.save(existingRecord.get()));
+  public ScanRecordResponse create(ScanRecordResponse scanRecord) {
+    EventResponse currentEvent = scanRecord.getScanner().getEvent();
+    //check valid member
+    MemberAccountResponse memberAccount = memberAccountService.findByMemberIdAndAccountTypeId(
+            scanRecord.getMember().getMemberId(),
+            scanRecord.getScanner().getAccountType().getAccountTypeId()
+    );
+    if (Objects.isNull(memberAccount)) {
+      throw new InvalidSessionException("Member is not valid for this event");
     }
-    return convert(baseRepository.save(scanRecord));
+    //check valid session
+    SessionResponse session = sessionService.findByValidSession(currentEvent.getEventId(),
+            scanRecord.getScannedDate(),
+            scanRecord.getScannedTime(),
+            scanRecord.getScannedTime());
+
+    if (Objects.isNull(session)) {
+      throw new InvalidSessionException("Session not found for the event or the time is invalid");
+    }
+
+    List<ScanRecord> records = scannerRecordRepository.findExistingRecord(
+            scanRecord.getMember().getMemberId(), session.getSessionDate(),
+            session.getStartTime(), session.getEndTime());
+    if (records.isEmpty()) {
+      scanRecord.setStatus("Check-In");
+      //take out one balance from member
+      memberAccount.setDefaultBalance(memberAccount.getDefaultBalance() - 1);
+      memberAccountService.update(memberAccount.getMemberAccountId(), memberAccount);
+    } else {
+      scanRecord.setStatus("Check-Out");
+    }
+    return create(scanRecord);
+
   }
 
   @Override
-  public ScanRecordResponse customDelete(Long recordId){
-    ScanRecord scanRecord = scannerRecordRepository.findById(recordId).orElseThrow(ResourceNotFoundException::new);
+  public ScanRecordResponse customDelete(Long recordId) {
+    ScanRecord scanRecord = scannerRecordRepository.findById(recordId)
+            .orElseThrow(ResourceNotFoundException::new);
     scanRecord.setDeprecated(true);
 
     return convert(baseRepository.save(scanRecord));

@@ -18,4 +18,9 @@ public interface MemberAccountRepository extends BaseRepository<MemberAccount, L
 
   List<MemberAccount> findByMember_MemberId(long memberId);
 
+  MemberAccount findByMember_MemberIdAndAccount_AccountType_AccountTypeId(long memberId, long accountypeId);
+
+
+
+
 }

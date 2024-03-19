@@ -32,9 +32,9 @@ public interface ScannerRecordRepository extends BaseRepository<ScanRecord, Long
   @Query(
           "SELECT s FROM ScanRecord s WHERE s.scannedDate = :date " +
                   "AND s.scannedTime BETWEEN :start_time AND :end_time " +
-                  "AND s.member = :member"
+                  "AND s.member.memberId = :memberId"
   )
-  public Optional<ScanRecord> findExistingRecord(@Param("member") Member member,
+  public List<ScanRecord> findExistingRecord(@Param("memberId") long memberId,
                                                  @Param("date") LocalDate date,
                                                  @Param("start_time") LocalTime start_time,
                                                  @Param("end_time") LocalTime end_time);
