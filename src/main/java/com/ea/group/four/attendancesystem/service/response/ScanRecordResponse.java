@@ -11,7 +11,6 @@ public class ScanRecordResponse implements Serializable {
 
   private static final long serialVersionUID = 1L;
   private long recordId;
-  private Scanner scanner;
   private Member member;
   private LocalDateTime scannedDateTime;
   private String status;
