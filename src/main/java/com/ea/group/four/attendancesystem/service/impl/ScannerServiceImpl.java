@@ -35,6 +35,7 @@ public class ScannerServiceImpl extends
     @Autowired
     ScannerRecordRepository scannerRecordRepository;
 
+    @Override
     public ScannerResponse create(ScannerResponse request) {
         Scanner scanner = requestMapper.map(request);
         Optional<Scanner> existingScanner = scannerRepository.findByEventAndLocationAndAccountType(scanner.getEvent(), scanner.getLocation(), scanner.getAccountType());

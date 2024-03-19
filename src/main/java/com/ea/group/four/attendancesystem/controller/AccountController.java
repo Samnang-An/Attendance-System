@@ -21,13 +21,13 @@ public class AccountController extends BaseReadWriteController<AccountResponse, 
   @Autowired
   ScannerRecordService scannerRecordService;
 
-  @GetMapping("/{accountId}/attendance/{fromDate}/{toDate}")
-  ResponseEntity<?> getAttendanceByAccountBetween(@PathVariable String accountName,
-      @PathVariable String fromDate, @PathVariable String toDate) {
-    List<ScanRecordResponse> recordByAccountBetweenDates = scannerRecordService.findByAccountBetweenDates(
-        accountName, fromDate, toDate);
-    return ResponseEntity.ok().body(recordByAccountBetweenDates);
-  }
+//  @GetMapping("/{accountId}/attendance/{fromDate}/{toDate}")
+//  ResponseEntity<?> getAttendanceByAccountBetween(@PathVariable String accountName,
+//      @PathVariable String fromDate, @PathVariable String toDate) {
+//    List<ScanRecordResponse> recordByAccountBetweenDates = scannerRecordService.findByAccountBetweenDates(
+//        accountName, fromDate, toDate);
+//    return ResponseEntity.ok().body(recordByAccountBetweenDates);
+//  }
 
 
 }

@@ -1,14 +1,16 @@
 package com.ea.group.four.attendancesystem.controller;
 
+import com.azure.core.annotation.Delete;
 import com.ea.group.four.attendancesystem.domain.Scanner;
+import com.ea.group.four.attendancesystem.service.ScannerRecordService;
 import com.ea.group.four.attendancesystem.service.ScannerService;
+import com.ea.group.four.attendancesystem.service.response.ScanRecordResponse;
 import com.ea.group.four.attendancesystem.service.response.ScannerResponse;
 import edu.miu.common.controller.BaseReadWriteController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 @RestController
 @RequestMapping("/scanners")
 public class ScannerController extends BaseReadWriteController<ScannerResponse, Scanner, Long> {
@@ -30,4 +32,22 @@ public class ScannerController extends BaseReadWriteController<ScannerResponse, 
                     .body("Error: " + e.getMessage());
         }
     }
+
+
+    @Autowired
+    private ScannerRecordService scannerRecordService;
+
+    @PostMapping("/{scannerCode}/records")
+    public ScanRecordResponse create(@PathVariable Long scannerCode,
+                                    @RequestBody ScanRecordResponse request) {
+        request.getScanner().setScannerId(scannerCode);
+        return scannerRecordService.create(request);
+    }
+
+    @DeleteMapping("/id")
+    public ScanRecordResponse customDelete(@PathVariable Long id){
+        return scannerRecordService.customDelete(id);
+    }
+
+
 }
