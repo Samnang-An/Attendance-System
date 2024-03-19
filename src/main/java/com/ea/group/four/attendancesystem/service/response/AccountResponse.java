@@ -11,6 +11,6 @@ public class AccountResponse implements Serializable {
   private long accountId;
   private String name;
   private String description;
-  private AccountType accountType;
+  private AccountTypeResponse accountType;
 
 }

@@ -12,6 +12,6 @@ public class RoleResponse implements Serializable {
   private static final long serialVersionUID = 1L;
   private long roleId;
   private String name;
-  private List<Account> accounts = new ArrayList<>();
+  private List<AccountResponse> accounts = new ArrayList<>();
 
 }

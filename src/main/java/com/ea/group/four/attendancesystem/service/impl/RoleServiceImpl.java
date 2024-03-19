@@ -1,8 +1,8 @@
 package com.ea.group.four.attendancesystem.service.impl;
 
-import com.ea.group.four.attendancesystem.domain.Account;
 import com.ea.group.four.attendancesystem.domain.Role;
 import com.ea.group.four.attendancesystem.service.RoleService;
+import com.ea.group.four.attendancesystem.service.response.AccountResponse;
 import com.ea.group.four.attendancesystem.service.response.RoleResponse;
 import edu.miu.common.service.BaseReadWriteServiceImpl;
 import java.util.List;
@@ -14,7 +14,7 @@ public class RoleServiceImpl extends BaseReadWriteServiceImpl<RoleResponse, Role
     RoleService {
 
   @Override
-  public RoleResponse assignAccountToRole(long roleId, List<Account> accounts) {
+  public RoleResponse assignAccountToRole(long roleId, List<AccountResponse> accounts) {
     RoleResponse role = findById(roleId);
     if (Objects.isNull(role)) {
       return null;

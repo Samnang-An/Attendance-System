@@ -3,6 +3,7 @@ package com.ea.group.four.attendancesystem.controller;
 import com.ea.group.four.attendancesystem.domain.Account;
 import com.ea.group.four.attendancesystem.domain.Role;
 import com.ea.group.four.attendancesystem.service.RoleService;
+import com.ea.group.four.attendancesystem.service.response.AccountResponse;
 import com.ea.group.four.attendancesystem.service.response.RoleResponse;
 import edu.miu.common.controller.BaseReadWriteController;
 import java.util.List;
@@ -23,7 +24,7 @@ public class RoleController extends BaseReadWriteController<RoleResponse, Role, 
 
   @PostMapping("/{roleId}/accounts/")
   public ResponseEntity<?> assignAccountToRole(@PathVariable long roleId,
-      @RequestBody List<Account> accounts) {
+      @RequestBody List<AccountResponse> accounts) {
     RoleResponse roleResponse = roleService.assignAccountToRole(roleId, accounts);
     return ResponseEntity.ok().body(roleResponse);
   }
