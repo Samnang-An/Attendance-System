@@ -14,4 +14,8 @@ public interface MemberAccountRepository extends BaseRepository<MemberAccount, L
       + "Where m.enabled=true and m.defaultBalance>0")
   List<MemberAccount> findAllValidAccount();
 
+  int countMemberAccountByAccount_AccountIdAndMember_MemberId(long accountId, long memberId);
+
+  List<MemberAccount> findByMember_MemberId(long memberId);
+
 }
