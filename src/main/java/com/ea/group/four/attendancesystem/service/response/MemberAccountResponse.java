@@ -10,8 +10,8 @@ public class MemberAccountResponse implements Serializable {
 
   private static final long serialVersionUID = 1L;
   private long memberAccountId;
-  private Member member;
-  private Account account;
+  private MemberResponse member;
+  private AccountResponse account;
   private int defaultBalance;
   private boolean enabled;
 }

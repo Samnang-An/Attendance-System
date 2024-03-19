@@ -11,7 +11,7 @@ public class ScannerResponse implements Serializable {
 
   private static final long serialVersionUID = 1L;
   private long scannerId;
-  private AccountType accountType;
-  private Location location;
-  private Event event;
+  private AccountTypeResponse accountType;
+  private LocationResponse location;
+  private EventResponse event;
 }
