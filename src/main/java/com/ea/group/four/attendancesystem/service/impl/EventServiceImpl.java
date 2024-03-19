@@ -22,10 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class EventServiceImpl extends
@@ -81,7 +78,7 @@ public class EventServiceImpl extends
         Optional<Event> optionalEvent = eventRepository.findById(eventId);
         if (optionalEvent.isPresent()){
             Event event = optionalEvent.get();
-            List<Member> existingMembers = event.getMembers();
+            Set<Member> existingMembers = event.getMembers();
             existingMembers.addAll(members);
             event.setMembers(existingMembers);
             event = eventRepository.save(event);

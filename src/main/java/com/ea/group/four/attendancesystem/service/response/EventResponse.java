@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import lombok.Data;
 
@@ -22,5 +23,5 @@ public class EventResponse implements Serializable {
 
   private Map<String,List<String>> schedule;
 
-  private List<Member> members = new ArrayList<>();
+  private Set<MemberResponse> members;
 }

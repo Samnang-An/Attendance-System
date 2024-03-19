@@ -6,17 +6,14 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Fetch;
 
-import javax.swing.plaf.synth.SynthTreeUI;
+
+
 
 @Data
 @NoArgsConstructor
@@ -39,7 +36,7 @@ public class Event implements Serializable {
 
   @ManyToMany(fetch = FetchType.LAZY)
 
-  private List<Member> members;
+  private Set<Member> members;
 
 
 
