@@ -22,6 +22,14 @@ public class MemberController extends BaseReadWriteController<MemberResponse, Me
     @Autowired
     MemberService memberService;
 
+    MemberController() {
+
+    }
+
+    MemberController(MemberService memberService) {
+        this.memberService = memberService;
+    }
+
     @GetMapping("/{memberId}/roles")
     public ResponseEntity<?> getRolesByMemberId(@PathVariable long memberId) {
         List<RoleResponse> roles=memberService.getRolesByMemberId(memberId);

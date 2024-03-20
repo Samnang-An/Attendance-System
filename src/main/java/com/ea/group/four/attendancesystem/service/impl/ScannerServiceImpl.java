@@ -10,6 +10,7 @@ import com.ea.group.four.attendancesystem.service.mapper.ScannerResponseToScanne
 import com.ea.group.four.attendancesystem.service.mapper.ScannerToScannerResponseMapper;
 import com.ea.group.four.attendancesystem.service.response.ScannerResponse;
 import edu.miu.common.exception.ResourceNotFoundException;
+import edu.miu.common.repository.BaseRepository;
 import edu.miu.common.service.BaseReadWriteServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,17 @@ import java.util.Optional;
 public class ScannerServiceImpl extends
     BaseReadWriteServiceImpl<ScannerResponse, Scanner, Long> implements
     ScannerService {
+
+    public ScannerServiceImpl() {
+    }
+
+    public ScannerServiceImpl(ScannerRepository scannerRepository, ScannerRecordRepository scannerRecordRepository,
+                              ScannerResponseToScannerMapper requestMapper, ScannerToScannerResponseMapper revertRequestMapper) {
+        this.scannerRepository = scannerRepository;
+        this.scannerRecordRepository = scannerRecordRepository;
+        this.requestMapper = requestMapper;
+        this.revertRequestMapper = revertRequestMapper;
+    }
 
     @Autowired
     ScannerResponseToScannerMapper requestMapper;
@@ -45,18 +57,29 @@ public class ScannerServiceImpl extends
             return revertRequestMapper.map(existingScanner.get());
         }
 
-        return convert(baseRepository.save(scanner));
+        return convert(scannerRepository.save(scanner));
     }
 
+    @Override
     public void delete(Long id) {
-        Scanner scanner = baseRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        Scanner scanner = scannerRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
         List<ScanRecord> scanRecords = scannerRecordRepository.findByScanner(scanner);
 
         if(!scanRecords.isEmpty()) {
             throw new RuntimeException("Cannot delete scanner with associated scan records.");
         }
 
-        baseRepository.delete(scanner);
+        scannerRepository.delete(scanner);
+    }
+
+    @Override
+    public ScannerResponse convert(Scanner entity) {
+        if(null == entity) {
+            return null;
+        }
+        else {
+            return revertRequestMapper.map(entity);
+        }
     }
 
 
