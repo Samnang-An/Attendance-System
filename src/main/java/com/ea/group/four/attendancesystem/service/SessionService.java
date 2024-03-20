@@ -10,7 +10,7 @@ import java.time.LocalTime;
 
 public interface SessionService extends BaseReadWriteService<SessionResponse, Session, Long> {
 
-    public void addSession(Event event, SessionResponse sessionResponse);
+    public SessionResponse addSession(Event event, SessionResponse sessionResponse);
 
     SessionResponse findByValidSession(Long eventId, LocalDate sessionDate, LocalTime startTime, LocalTime endTime);
 

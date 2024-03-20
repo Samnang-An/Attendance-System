@@ -31,15 +31,15 @@ public class SessionServiceImpl extends
     private SessionRepository sessionRepository;
 
     @Override
-    public void addSession(Event event, SessionResponse sessionResponse) {
+    public SessionResponse addSession(Event event, SessionResponse sessionResponse) {
             LocalDate sessionDate = sessionResponse.getSessionDate();
             if (sessionDate.isBefore(event.getStartDate()) || sessionDate.isAfter(event.getEndDate())) {
-                return ;
+                throw new InvalidSessionException(" Session not isnside event timeline");
             }
             Session newSession = sessionResponseToSessionMapper.map(sessionResponse);
             newSession.setEvent(event);
             sessionRepository.save(newSession);
-
+            return  sessionToSessionResponseMapper.map(newSession);
     }
 
     @Override
@@ -56,7 +56,6 @@ public class SessionServiceImpl extends
             throw new InvalidSessionException("Invalid Session");
         }
         Session updatedSession = sessionResponseToSessionMapper.map(sessionResponse);
-
         return sessionToSessionResponseMapper.map(sessionRepository.save(updatedSession));
     }
 
