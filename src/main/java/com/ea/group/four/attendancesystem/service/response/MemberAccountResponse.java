@@ -10,6 +10,6 @@ public class MemberAccountResponse implements Serializable {
   private long memberAccountId;
   private MemberResponse member;
   private AccountResponse account;
-  private int balance;
+  private int defaultBalance;
   private boolean enabled;
 }

@@ -81,7 +81,7 @@ public class ScannerRecordServiceImpl extends
     if (records.isEmpty()) {
       scanRecord.setStatus("Check-In");
       //take out one balance from member
-      memberAccount.setBalance(memberAccount.getBalance() - 1);
+      memberAccount.setDefaultBalance(memberAccount.getDefaultBalance() - 1);
       memberAccountService.update(memberAccount.getMemberAccountId(), memberAccount);
     } else {
       scanRecord.setStatus("Check-Out");

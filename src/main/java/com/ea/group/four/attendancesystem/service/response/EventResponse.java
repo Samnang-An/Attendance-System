@@ -18,6 +18,8 @@ public class EventResponse implements Serializable {
     private LocalDate startDate;
     private LocalDate endDate;
 
+    private String eventSchedule;
+
 
     private Map<String, List<String>> schedule;
 
