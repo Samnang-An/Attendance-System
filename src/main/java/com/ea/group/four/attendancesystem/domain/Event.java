@@ -37,7 +37,7 @@ public class Event implements Serializable {
   private String eventSchedule;
 
 
-  @ManyToMany(fetch = FetchType.LAZY)
+  @ManyToMany()
   private Set<Member> members;
 
 

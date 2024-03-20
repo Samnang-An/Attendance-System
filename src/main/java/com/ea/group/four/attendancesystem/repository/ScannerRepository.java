@@ -19,9 +19,7 @@ public interface ScannerRepository extends BaseRepository<Scanner, Long> {
             @Param("accountType") AccountType accountType
     );
 
-    @Query("SELECT s From Scanner s WHERE s.event =:event")
-    List<Scanner> findAllScannersByEvent(
-            @Param("event") Event event
-    );
+
+    List<Scanner> findAllScannersByEvent(Event event);
 
 }
