@@ -8,6 +8,7 @@ import com.ea.group.four.attendancesystem.service.MemberAccountService;
 import com.ea.group.four.attendancesystem.service.MemberService;
 import com.ea.group.four.attendancesystem.service.RoleService;
 import com.ea.group.four.attendancesystem.service.mapper.ScannerRecordToScannerRecordResponseMapper;
+import com.ea.group.four.attendancesystem.service.response.AccountResponse;
 import com.ea.group.four.attendancesystem.service.response.MemberResponse;
 import com.ea.group.four.attendancesystem.service.response.RoleResponse;
 import com.ea.group.four.attendancesystem.service.response.ScanRecordDTO;
@@ -34,6 +35,15 @@ public class MemberServiceImpl extends
   private RoleService roleService;
   @Autowired
   private MemberAccountService memberAccountService;
+
+  @Override
+  public MemberResponse create(MemberResponse memberResponse) {
+    MemberResponse member = super.create(memberResponse);
+    List<AccountResponse> accounts = member.getRoles().stream().map(RoleResponse::getAccounts)
+        .flatMap(List::stream).toList();
+    memberAccountService.assignMemberAccount(member, accounts);
+    return member;
+  }
 
   @Override
   public List<ScanRecord> getMemberAttendance(Long memberId) {
