@@ -1,5 +1,4 @@
 package com.ea.group.four.attendancesystem.service.impl;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -73,10 +72,10 @@ class MemberServiceImplTest {
     void testGetRolesByMemberId() {
         Member member = new Member();
         member.setBarcode("Barcode");
-        member.setEmail("jane.doe@example.org");
+        member.setEmail("Jhon.smith@gmail.com");
         member.setEvents(new ArrayList<>());
-        member.setFirstName("Jane");
-        member.setLastName("Doe");
+        member.setFirstName("Jhon");
+        member.setLastName("Smith");
         member.setMemberId(1L);
         member.setRoles(new ArrayList<>());
         Optional<Member> ofResult = Optional.of(member);
@@ -84,9 +83,9 @@ class MemberServiceImplTest {
 
         MemberResponse memberResponse = new MemberResponse();
         memberResponse.setBarcode("Barcode");
-        memberResponse.setEmail("jane.doe@example.org");
-        memberResponse.setFirstName("Jane");
-        memberResponse.setLastName("Doe");
+        memberResponse.setEmail("Jhone.smith@gmail.com");
+        memberResponse.setFirstName("Jhon");
+        memberResponse.setLastName("Smith");
         memberResponse.setMemberId(1L);
         ArrayList<RoleResponse> roles = new ArrayList<>();
         memberResponse.setRoles(roles);
@@ -262,3 +261,4 @@ class MemberServiceImplTest {
         assertEquals(events, roleResponse2.getAccounts());
     }
 }
+
