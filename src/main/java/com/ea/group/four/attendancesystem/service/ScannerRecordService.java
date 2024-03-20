@@ -8,8 +8,10 @@ import java.util.List;
 public interface ScannerRecordService extends
     BaseReadWriteService<ScanRecordResponse, ScanRecord, Long> {
 
-  List<ScanRecordResponse> findByAccountBetweenDates(String accountName, String fromDate, String toDate);
-  public ScanRecordResponse customDelete(Long Id);
+  List<ScanRecordResponse> findByAccountBetweenDates(long accountTypeId, String fromDate,
+      String toDate);
+
+  ScanRecordResponse customDelete(Long Id);
 
 
 }
