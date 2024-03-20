@@ -34,7 +34,7 @@ public class SessionServiceImpl extends
     public SessionResponse addSession(Event event, SessionResponse sessionResponse) {
             LocalDate sessionDate = sessionResponse.getSessionDate();
             if (sessionDate.isBefore(event.getStartDate()) || sessionDate.isAfter(event.getEndDate())) {
-                throw new InvalidSessionException(" Session not isnside event timeline");
+                throw new InvalidSessionException(" Session is not inside the event timeline");
             }
             Session newSession = sessionResponseToSessionMapper.map(sessionResponse);
             newSession.setEvent(event);

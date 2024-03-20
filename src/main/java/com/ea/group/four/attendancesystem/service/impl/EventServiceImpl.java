@@ -61,6 +61,7 @@ public class EventServiceImpl extends BaseReadWriteServiceImpl<EventResponse, Ev
         return getEventResponse(event, schedule);
     }
 
+
     private EventResponse getEventResponse(Event event, Map<String, List<String>> schedule) {
         try {
             String scheduleJson = objectMapper.writeValueAsString(schedule);
@@ -178,6 +179,17 @@ public class EventServiceImpl extends BaseReadWriteServiceImpl<EventResponse, Ev
     }
 
     @Override
+    public SessionResponse addSession(Long eventId, SessionResponse sessionResponse) throws  InvalidSessionException {
+        Optional<Event> optionalEvent = eventRepository.findById(eventId);
+        if (optionalEvent.isPresent()) {
+            Event event = optionalEvent.get();
+            return  sessionService.addSession(event,sessionResponse);
+        } else {
+            throw new EntityNotFoundException("Event not found with id: " + eventId);
+        }
+    }
+
+    @Override
     public SessionResponse updateSession(Long eventId,SessionResponse sessionResponse ) throws InvalidSessionException{
         Optional<Event> optionalEvent = eventRepository.findById(eventId);
         if (optionalEvent.isPresent()) {
@@ -186,5 +198,11 @@ public class EventServiceImpl extends BaseReadWriteServiceImpl<EventResponse, Ev
         } else {
             throw new EntityNotFoundException("Event not found with id: " + eventId);
         }
+    }
+
+    @Override
+    public void deleteSession(SessionResponse session) {
+        sessionService.deleteSession(session);
+
     }
 }

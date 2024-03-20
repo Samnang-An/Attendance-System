@@ -67,6 +67,18 @@ public class EventController extends BaseReadWriteController<EventResponse, Even
         }
     }
 
+    @PostMapping("/{eventId}/session")
+    public  ResponseEntity<?> addSession(@PathVariable Long eventId,@RequestBody SessionResponse sessionResponse){
+        try{
+            SessionResponse addedSessionResponse = eventService.addSession(eventId,sessionResponse);
+            return ResponseEntity.ok(addedSessionResponse);
+        }catch (EntityNotFoundException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error while adding members to event: " + e.getMessage());
+        }
+    }
+
     @PutMapping("/{eventId}/session")
     public ResponseEntity<?> updateSession(@PathVariable Long eventId, @RequestBody SessionResponse sessionResponse){
         try{
@@ -80,7 +92,15 @@ public class EventController extends BaseReadWriteController<EventResponse, Even
 
     }
 
-
+    @DeleteMapping("/session")
+    public ResponseEntity<?> deleteSession(@RequestBody SessionResponse sessionResponse){
+        try{
+            eventService.deleteSession(sessionResponse);
+            return  ResponseEntity.ok("Session deleted successfully.");
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error while deleting the session: " + e.getMessage());
+        }
+    }
 
     @PutMapping("/members/{eventId}/remove/{memberId}")
     public ResponseEntity<?> removeMemberFromEvent(@PathVariable Long eventId, @PathVariable Long memberId){

@@ -14,11 +14,13 @@ public interface EventService extends BaseReadWriteService<EventResponse, Event,
 
 
     public EventResponse create(EventResponse request);
+    public SessionResponse addSession(Long eventId, SessionResponse session);
+    public SessionResponse updateSession(Long eventId,SessionResponse sessionResponse);
+    public void deleteSession(SessionResponse session);
+    public EventResponse updateSchedule(Long eventId,Map<String,List<String>> schedule);
     public EventResponse addMembersToEvent(Long eventId, List<Member> members);
+    public EventResponse removeMember(Long eventId,Long memberId);
     public List<ScanRecordResponse> calculateAttendanceOfEvent(Long eventId);
 
-    public SessionResponse updateSession(Long eventId,SessionResponse sessionResponse);
-    public EventResponse updateSchedule(Long eventId,Map<String,List<String>> schedule);
-    public EventResponse removeMember(Long eventId,Long memberId);
 
 }
