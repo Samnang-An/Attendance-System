@@ -35,6 +35,15 @@ public class MemberServiceImpl extends
   @Autowired
   private MemberAccountService memberAccountService;
 
+  MemberServiceImpl() {
+
+  }
+
+  MemberServiceImpl(MemberRepository memberRepository, ScannerRecordRepository scannerRecordRepository) {
+    this.memberRepository = memberRepository;
+    this.scanRecordRepository = scannerRecordRepository;
+  }
+
   @Override
   public List<ScanRecord> getMemberAttendance(Long memberId) {
     Optional<Member> member = memberRepository.findById(memberId);
