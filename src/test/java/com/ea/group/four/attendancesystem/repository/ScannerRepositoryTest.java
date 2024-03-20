@@ -36,7 +36,6 @@ class ScannerRepositoryTest {
     void testFindByEventAndLocationAndAccountType() {
 
         AccountType accountType = new AccountType();
-        accountType.setDefaultBalance(1);
         accountType.setName("Name");
 
         Event event = new Event();
