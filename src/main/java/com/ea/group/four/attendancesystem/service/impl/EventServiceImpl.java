@@ -58,6 +58,10 @@ public class EventServiceImpl extends BaseReadWriteServiceImpl<EventResponse, Ev
         if (schedule.isEmpty()) {
             throw new InvalidScheduleException("Invalid Schedule");
         }
+        return getEventResponse(event, schedule);
+    }
+
+    private EventResponse getEventResponse(Event event, Map<String, List<String>> schedule) {
         try {
             String scheduleJson = objectMapper.writeValueAsString(schedule);
             event.setEventSchedule(scheduleJson);
@@ -79,8 +83,7 @@ public class EventServiceImpl extends BaseReadWriteServiceImpl<EventResponse, Ev
         try {
             String eventIdJson = objectMapper.writeValueAsString(event.getEventId());
             String scheduleJson = objectMapper.writeValueAsString(schedule);
-            String eventMessage = eventIdJson + "###" + scheduleJson;
-            return eventMessage;
+            return eventIdJson + "###" + scheduleJson;
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -98,8 +101,7 @@ public class EventServiceImpl extends BaseReadWriteServiceImpl<EventResponse, Ev
             existingMembers.addAll(members);
             event.setMembers(existingMembers);
             event = eventRepository.save(event);
-            EventResponse eventResponse = revertRequestMapper.map(event);
-            return eventResponse;
+            return  revertRequestMapper.map(event);
         } else {
             throw new EntityNotFoundException("Event not found with id: " + eventId);
         }
@@ -142,19 +144,7 @@ public class EventServiceImpl extends BaseReadWriteServiceImpl<EventResponse, Ev
                 throw new InvalidScheduleException("Invalid Schedule");
             } else {
 
-                try {
-                    String scheduleJson = objectMapper.writeValueAsString(schedule);
-                    event.setEventSchedule(scheduleJson);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                Event savedEvent = eventRepository.save(event);
-                Optional<Event> verifySavedEvent = eventRepository.findById(savedEvent.getEventId());
-                if (verifySavedEvent.isPresent()){
-                String eventMessage = convertEventAndScheduleToString(savedEvent, schedule);
-                jmsSender.sendJMSMessage(eventMessage, "event.schedule.queue");
-                }
-                return revertRequestMapper.map(savedEvent);
+                return getEventResponse(event, schedule);
             }
 
         } else {

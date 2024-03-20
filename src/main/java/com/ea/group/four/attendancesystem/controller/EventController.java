@@ -34,7 +34,7 @@ public class EventController extends BaseReadWriteController<EventResponse, Even
             EventResponse eventResponse = eventService.create(request);
             return ResponseEntity.ok(eventResponse);
         }catch (InvalidScheduleException e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error while creating event: " + e.getMessage());
         }
@@ -48,7 +48,7 @@ public class EventController extends BaseReadWriteController<EventResponse, Even
             EventResponse event = eventService.addMembersToEvent(eventId, members);
             return ResponseEntity.ok(event);
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error while adding members to event: " + e.getMessage());
         }
@@ -61,7 +61,7 @@ public class EventController extends BaseReadWriteController<EventResponse, Even
             EventResponse eventResponse = eventService.updateSchedule(eventId,schedule);
             return ResponseEntity.ok(eventResponse);
         }catch (InvalidScheduleException e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error while adding members to event: " + e.getMessage());
         }
@@ -72,13 +72,15 @@ public class EventController extends BaseReadWriteController<EventResponse, Even
         try{
             SessionResponse updatedSessionResponse = eventService.updateSession(eventId, sessionResponse);
             return ResponseEntity.ok(updatedSessionResponse);
-        }catch (InvalidSessionException e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e);
+        }catch (InvalidSessionException | EntityNotFoundException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error while updating the session for event: " + e.getMessage());
         }
 
     }
+
+
 
     @PutMapping("/members/{eventId}/remove/{memberId}")
     public ResponseEntity<?> removeMemberFromEvent(@PathVariable Long eventId, @PathVariable Long memberId){
@@ -87,22 +89,22 @@ public class EventController extends BaseReadWriteController<EventResponse, Even
             return ResponseEntity.ok(event);
         }
         catch (EntityNotFoundException | InvalidMemberException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error while removing member from event: " + e.getMessage());
         }
     }
-
     @GetMapping("{eventId}/attendance")
     public ResponseEntity<?> getAttendanceOfEvent(@PathVariable Long eventId){
         try {
             List<ScanRecordResponse> eventAttendance = eventService.calculateAttendanceOfEvent(eventId);
             return ResponseEntity.ok(eventAttendance);
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error while getting attendance of event: " + e.getMessage());
         }
 
     }
 }
+
