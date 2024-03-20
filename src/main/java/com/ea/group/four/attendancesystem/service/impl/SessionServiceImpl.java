@@ -30,6 +30,12 @@ public class SessionServiceImpl extends
     @Autowired
     private SessionRepository sessionRepository;
 
+    public SessionServiceImpl(SessionToSessionResponseMapper sessionToSessionResponseMapper, SessionResponseToSessionMapper sessionResponseToSessionMapper, SessionRepository sessionRepository) {
+        this.sessionToSessionResponseMapper = sessionToSessionResponseMapper;
+        this.sessionResponseToSessionMapper = sessionResponseToSessionMapper;
+        this.sessionRepository = sessionRepository;
+    }
+
     @Override
     public SessionResponse addSession(Event event, SessionResponse sessionResponse) {
             LocalDate sessionDate = sessionResponse.getSessionDate();
