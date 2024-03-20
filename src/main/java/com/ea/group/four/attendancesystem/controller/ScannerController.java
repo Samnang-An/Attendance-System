@@ -2,6 +2,8 @@ package com.ea.group.four.attendancesystem.controller;
 
 import com.azure.core.annotation.Delete;
 import com.ea.group.four.attendancesystem.domain.Scanner;
+import com.ea.group.four.attendancesystem.exception.InvalidMemberException;
+import com.ea.group.four.attendancesystem.exception.InvalidSessionException;
 import com.ea.group.four.attendancesystem.service.ScannerRecordService;
 import com.ea.group.four.attendancesystem.service.ScannerService;
 import com.ea.group.four.attendancesystem.service.request.ScanRecordRequest;
@@ -40,7 +42,14 @@ public class ScannerController extends BaseReadWriteController<ScannerResponse, 
     @PostMapping("/{scannerCode}/records")
     public ResponseEntity<?> createScannerRecord(@PathVariable Long scannerCode,
                                     @RequestBody ScanRecordRequest request) {
-        return ResponseEntity.ok(scannerRecordService.customCreate(request, scannerCode));
+        try{
+
+        return ResponseEntity.ok(scannerRecordService.customCreate(scannerCode, request));
+        }catch (InvalidMemberException | InvalidSessionException e){
+            return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 
     @DeleteMapping("/{id}/records")
