@@ -14,4 +14,6 @@ public interface SessionRepository extends BaseRepository<Session, Long> {
 
     List<Session> findAllSessionsByEventEventIdAndSessionDateGreaterThanEqual(Long eventId,LocalDate currentDate);
 
+    Session findByEvent_EventIdAndSessionId(Long eventId,Long sessionId);
+
 }

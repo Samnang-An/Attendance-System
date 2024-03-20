@@ -2,6 +2,7 @@ package com.ea.group.four.attendancesystem.service.impl;
 
 import com.ea.group.four.attendancesystem.domain.Event;
 import com.ea.group.four.attendancesystem.domain.Session;
+import com.ea.group.four.attendancesystem.exception.InvalidSessionException;
 import com.ea.group.four.attendancesystem.repository.EventRepository;
 import com.ea.group.four.attendancesystem.repository.SessionRepository;
 import com.ea.group.four.attendancesystem.service.SessionService;
@@ -17,8 +18,10 @@ import java.time.LocalTime;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class SessionServiceImpl extends
         BaseReadWriteServiceImpl<SessionResponse, Session, Long> implements
         SessionService {
@@ -60,6 +63,22 @@ public class SessionServiceImpl extends
                                               LocalTime endTime) {
         return sessionRepository.findSessionByEventEventIdAndSessionDateAndStartTimeLessThanEqualAndEndTimeGreaterThanEqual(
                 eventId, sessionDate, startTime, endTime);
+    }
+
+    @Override
+    public SessionResponse updateSession(Long eventId, Long sessionId, SessionResponse sessionResponse) {
+        Session session = sessionRepository.findByEvent_EventIdAndSessionId(eventId,sessionId);
+        if(session == null){
+            throw new InvalidSessionException("Invalid Session");
+        }
+        Session updatedSession = sessionResponseToSessionMapper.map(sessionResponse);
+
+        return sessionToSessionResponseMapper.map(sessionRepository.save(updatedSession));
+    }
+
+    @Override
+    public void deleteSession(SessionResponse sessionResponse) {
+        sessionRepository.delete(sessionResponseToSessionMapper.map(sessionResponse));
     }
 
 
