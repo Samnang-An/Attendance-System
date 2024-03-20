@@ -128,44 +128,6 @@ public class ScannerRecordServiceImpl extends
             throw  new RuntimeException("Scanner Not found");
         }
 
-////    EventResponse currentEvent = scanRecordRequest.getScanner().getEvent();
-//    Optional<Scanner> optionalScanner = scannerRepository.findById(scannerCode);
-//    Scanner foundScanner = null;
-//    if (optionalScanner.isPresent()){
-//      foundScanner = optionalScanner.get();
-//    }else{
-//      throw new RuntimeException("Scanner not found");
-//    }
-//    Event event = foundScanner.getEvent();
-//    //check valid member
-//    MemberAccountResponse memberAccount = memberAccountService.findByMemberIdAndAccountTypeId(
-//        scanRecordRequest.getMemberId(),
-//            foundScanner.getAccountType().getAccountTypeId()
-//    );
-//    if (Objects.isNull(memberAccount)) {
-//      throw new InvalidSessionException("Member is not valid for this event");
-//    }
-//    //check valid session
-//    SessionResponse session = sessionService.findByValidSession(event.getEventId(),
-//        scanRecordRequest.getScannedDate(),
-//        scanRecordRequest.getScannedTime(), scanRecordRequest.getScannedTime());
-//
-//    if (Objects.isNull(session)) {
-//      throw new InvalidSessionException("Session not found for the event or the time is invalid");
-//    }
-//
-//    List<ScanRecord> records = scannerRecordRepository.findExistingRecord(
-//        scanRecordRequest.getMemberId(), session.getSessionDate(),
-//        session.getStartTime(), session.getEndTime());
-//    if (records.isEmpty()) {
-//      scanRecord.setStatus("Check-In");
-//      //take out one balance from member
-//      memberAccount.setDefaultBalance(memberAccount.getDefaultBalance() - 1);
-//      memberAccountService.update(memberAccount.getMemberAccountId(), memberAccount);
-//    } else {
-//      scanRecord.setStatus("Check-Out");
-//    }
-//    return create(scanRecord);
 
     }
 
