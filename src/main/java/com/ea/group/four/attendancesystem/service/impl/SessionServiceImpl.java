@@ -3,19 +3,14 @@ package com.ea.group.four.attendancesystem.service.impl;
 import com.ea.group.four.attendancesystem.domain.Event;
 import com.ea.group.four.attendancesystem.domain.Session;
 import com.ea.group.four.attendancesystem.exception.InvalidSessionException;
-import com.ea.group.four.attendancesystem.repository.EventRepository;
 import com.ea.group.four.attendancesystem.repository.SessionRepository;
 import com.ea.group.four.attendancesystem.service.SessionService;
-import com.ea.group.four.attendancesystem.service.mapper.EventReponseToEventMapper;
-import com.ea.group.four.attendancesystem.service.mapper.EventToEventReponseMapper;
 import com.ea.group.four.attendancesystem.service.mapper.SessionResponseToSessionMapper;
 import com.ea.group.four.attendancesystem.service.mapper.SessionToSessionResponseMapper;
-import com.ea.group.four.attendancesystem.service.response.EventResponse;
 import com.ea.group.four.attendancesystem.service.response.SessionResponse;
 import edu.miu.common.service.BaseReadWriteServiceImpl;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,31 +26,20 @@ public class SessionServiceImpl extends
 
     @Autowired
     SessionResponseToSessionMapper sessionResponseToSessionMapper;
-    @Autowired
-    EventToEventReponseMapper eventToEventReponseMapper;
-    @Autowired
-    EventReponseToEventMapper eventReponseToEventMapper;
+
     @Autowired
     private SessionRepository sessionRepository;
-    @Autowired
-    private EventRepository eventRepository;
 
     @Override
-    public EventResponse addSession(Long eventId, SessionResponse sessionResponse) {
-        System.out.println(sessionResponse);
-        Optional<Event> eventOptional = eventRepository.findById(eventId);
-        if (eventOptional.isPresent()) {
-            Event event = eventOptional.get();
+    public void addSession(Event event, SessionResponse sessionResponse) {
             LocalDate sessionDate = sessionResponse.getSessionDate();
             if (sessionDate.isBefore(event.getStartDate()) || sessionDate.isAfter(event.getEndDate())) {
-                return null;
+                return ;
             }
             Session newSession = sessionResponseToSessionMapper.map(sessionResponse);
             newSession.setEvent(event);
             sessionRepository.save(newSession);
-            return eventToEventReponseMapper.map(event);
-        }
-        return null;
+
     }
 
     @Override
