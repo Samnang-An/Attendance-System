@@ -30,14 +30,15 @@ public class Event implements Serializable {
   private LocalDate startDate;
   private LocalDate endDate;
 
-
   @Transient
   private Map<String,List<String>> schedule  = new HashMap<>();
+
 
   private String eventSchedule;
 
 
-  @ManyToMany()
+
+  @ManyToMany
   private Set<Member> members;
 
 
