@@ -14,6 +14,7 @@ import com.ea.group.four.attendancesystem.service.response.ScanRecordResponse;
 import com.ea.group.four.attendancesystem.service.response.SessionResponse;
 import edu.miu.common.exception.ResourceNotFoundException;
 import edu.miu.common.service.BaseReadWriteServiceImpl;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
@@ -24,8 +25,8 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 public class ScannerRecordServiceImpl extends
-        BaseReadWriteServiceImpl<ScanRecordResponse, ScanRecord, Long> implements
-        ScannerRecordService {
+    BaseReadWriteServiceImpl<ScanRecordResponse, ScanRecord, Long> implements
+    ScannerRecordService {
 
   @Autowired
   ScannerRecordRepository scannerRecordRepository;
@@ -46,42 +47,44 @@ public class ScannerRecordServiceImpl extends
   MemberAccountService memberAccountService;
 
   @Override
-  public List<ScanRecordResponse> findByAccountBetweenDates(String accountName,
-                                                            String fromDateString,
-                                                            String toDateString) {
-    return convert(scannerRecordRepository.findByScannerAndScannedDateTimeBetween(
-            accountName,
-            fromDateString,
-            toDateString));
+  public List<ScanRecordResponse> findByAccountBetweenDates(long accountTypeId,
+      String fromDateString,
+      String toDateString) {
+
+    return convert(
+        scannerRecordRepository.findScanRecordByScanner_AccountType_AccountTypeIdAndScannedDateBetween(
+            accountTypeId,
+            LocalDate.parse(fromDateString),
+            LocalDate.parse(toDateString)));
   }
 
   public ScanRecordResponse create(ScanRecordResponse scanRecord) {
     EventResponse currentEvent = scanRecord.getScanner().getEvent();
     //check valid member
     MemberAccountResponse memberAccount = memberAccountService.findByMemberIdAndAccountTypeId(
-            scanRecord.getMember().getMemberId(),
-            scanRecord.getScanner().getAccountType().getAccountTypeId()
+        scanRecord.getMember().getMemberId(),
+        scanRecord.getScanner().getAccountType().getAccountTypeId()
     );
     if (Objects.isNull(memberAccount)) {
       throw new InvalidSessionException("Member is not valid for this event");
     }
     //check valid session
     SessionResponse session = sessionService.findByValidSession(currentEvent.getEventId(),
-            scanRecord.getScannedDate(),
-            scanRecord.getScannedTime(),
-            scanRecord.getScannedTime());
+        scanRecord.getScannedDate(),
+        scanRecord.getScannedTime(),
+        scanRecord.getScannedTime());
 
     if (Objects.isNull(session)) {
       throw new InvalidSessionException("Session not found for the event or the time is invalid");
     }
 
     List<ScanRecord> records = scannerRecordRepository.findExistingRecord(
-            scanRecord.getMember().getMemberId(), session.getSessionDate(),
-            session.getStartTime(), session.getEndTime());
+        scanRecord.getMember().getMemberId(), session.getSessionDate(),
+        session.getStartTime(), session.getEndTime());
     if (records.isEmpty()) {
       scanRecord.setStatus("Check-In");
       //take out one balance from member
-      memberAccount.setBalance(memberAccount.getBalance() - 1);
+      memberAccount.setDefaultBalance(memberAccount.getDefaultBalance() - 1);
       memberAccountService.update(memberAccount.getMemberAccountId(), memberAccount);
     } else {
       scanRecord.setStatus("Check-Out");
@@ -93,7 +96,7 @@ public class ScannerRecordServiceImpl extends
   @Override
   public ScanRecordResponse customDelete(Long recordId) {
     ScanRecord scanRecord = scannerRecordRepository.findById(recordId)
-            .orElseThrow(ResourceNotFoundException::new);
+        .orElseThrow(ResourceNotFoundException::new);
     scanRecord.setDeprecated(true);
 
     return convert(baseRepository.save(scanRecord));

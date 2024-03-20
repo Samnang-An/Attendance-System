@@ -22,5 +22,5 @@ public class AccountType implements Serializable {
     private long accountTypeId;
 
     private String name;
-    private  int defaultBalance;
+    private  int balance;
 }

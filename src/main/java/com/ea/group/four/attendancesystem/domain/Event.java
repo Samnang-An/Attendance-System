@@ -33,6 +33,11 @@ public class Event implements Serializable {
   @Transient
   private Map<String,List<String>> schedule  = new HashMap<>();
 
+
+  private String eventSchedule;
+
+
+
   @ManyToMany
   private Set<Member> members;
 

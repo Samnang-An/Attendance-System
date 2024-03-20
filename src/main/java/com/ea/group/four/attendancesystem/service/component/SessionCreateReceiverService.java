@@ -43,22 +43,35 @@ public class SessionCreateReceiverService {
     public void createSessionsFromSchedule(String payload) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         String[] parts = payload.split("###");
-        long eventId = Long.parseLong(parts[0]);
+        Long eventId = Long.parseLong(parts[0]);
         String scheduleJson = parts[1];
 
         Event event = eventRepository.findByEventId(eventId);
-        Map<String, List<String>> schedule = objectMapper.readValue(
-                scheduleJson,
-                new TypeReference<Map<String, List<String>>>() {});
-        createSessionFromSchedule(event,schedule);
+
+            Map<String, List<String>> schedule = objectMapper.readValue(
+                    scheduleJson,
+                    new TypeReference<Map<String, List<String>>>() {});
+            createSessionFromSchedule(event,schedule);
+
+
     }
 
     public void createSessionFromSchedule(Event event, Map<String, List<String>> schedule){
-        LocalDate currentDate = event.getStartDate();
-        List<Session> sessions = new ArrayList<>();
-        while(!currentDate.isAfter(event.getEndDate())){
+        LocalDate trackerDate;
 
-            String dayOfWeek = currentDate.getDayOfWeek().toString();
+        LocalDate currentDate = LocalDate.now();
+//        LocalDate currentDate = LocalDate.of(2024, 5, 13);
+
+        if(currentDate.isAfter(event.getStartDate()) && currentDate.isBefore(event.getEndDate())){
+            trackerDate = currentDate;
+            deleteFutureSessions(event.getEventId(),currentDate);
+        }else{
+            trackerDate = event.getStartDate();
+        }
+        List<Session> sessions = new ArrayList<>();
+        while(!trackerDate.isAfter(event.getEndDate())){
+
+            String dayOfWeek = trackerDate.getDayOfWeek().toString();
             if(schedule.containsKey(dayOfWeek.toUpperCase())){
                 List<String> timeSlots = schedule.get(dayOfWeek);
                 for(String timeSlot : timeSlots){
@@ -66,16 +79,22 @@ public class SessionCreateReceiverService {
                     LocalTime startTime = LocalTime.parse(times[0]);
                     LocalTime endTime = LocalTime.parse(times[1]);
                     Session session = new Session();
-                    session.setSessionDate(currentDate);
+                    session.setSessionDate(trackerDate);
                     session.setStartTime(startTime);
                     session.setEndTime(endTime);
                     session.setEvent(event);
                     sessions.add(session);
                 }
             }
-            currentDate = currentDate.plusDays(1);
+            trackerDate = trackerDate.plusDays(1);
         }
         sessionRepository.saveAll(sessions);
+
+    }
+
+    public void deleteFutureSessions(Long eventId, LocalDate currentDate){
+        List<Session> sessionsToDelete = sessionRepository.findAllSessionsByEventEventIdAndSessionDateGreaterThanEqual(eventId,currentDate);
+        sessionRepository.deleteAll(sessionsToDelete);
 
     }
 

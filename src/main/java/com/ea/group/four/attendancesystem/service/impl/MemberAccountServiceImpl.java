@@ -36,7 +36,7 @@ public class MemberAccountServiceImpl extends
                         MemberAccountResponse memberAccountResponse = new MemberAccountResponse();
                         memberAccountResponse.setAccount(account);
                         memberAccountResponse.setMember(member);
-                        memberAccountResponse.setBalance(account.getAccountType().getDefaultBalance());
+                        memberAccountResponse.setDefaultBalance(account.getAccountType().getBalance());
                         memberAccountResponse.setEnabled(true);
                         create(memberAccountResponse);
                     }

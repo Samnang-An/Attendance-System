@@ -11,7 +11,7 @@ public interface MemberAccountRepository extends BaseRepository<MemberAccount, L
       + "Join fetch m.account "
       + "Join fetch m.member "
       + "Join fetch m.account.accountType "
-      + "Where m.enabled=true and m.balance>0")
+      + "Where m.enabled=true and m.defaultBalance>0")
   List<MemberAccount> findAllValidAccount();
 
   int countMemberAccountByAccount_AccountIdAndMember_MemberId(long accountId, long memberId);
