@@ -4,9 +4,11 @@ import com.ea.group.four.attendancesystem.domain.Event;
 import com.ea.group.four.attendancesystem.domain.Member;
 import com.ea.group.four.attendancesystem.domain.ScanRecord;
 import com.ea.group.four.attendancesystem.domain.Scanner;
+import com.ea.group.four.attendancesystem.exception.InvalidMemberException;
 import com.ea.group.four.attendancesystem.exception.InvalidScheduleException;
 import com.ea.group.four.attendancesystem.integration.jms.JMSSender;
 import com.ea.group.four.attendancesystem.repository.EventRepository;
+import com.ea.group.four.attendancesystem.repository.MemberRepository;
 import com.ea.group.four.attendancesystem.repository.ScannerRecordRepository;
 import com.ea.group.four.attendancesystem.service.EventService;
 import com.ea.group.four.attendancesystem.service.ScannerService;
@@ -51,6 +53,10 @@ public class EventServiceImpl extends
 
     @Autowired
     private ScannerRecordRepository scannerRecordRepository;
+
+    @Autowired
+    private MemberRepository memberRepository;
+
     public static  final ObjectMapper objectMapper = new ObjectMapper();
 
 
@@ -126,14 +132,36 @@ public class EventServiceImpl extends
                     eventAttendanceResponse.add(revertScanRecordMapper.map(s));
                 }
             }
-
             return eventAttendanceResponse;
-
-
         } else {
             throw new EntityNotFoundException("Event not found with id: " + eventId);
         }
 
 
+    }
+
+    @Override
+    public EventResponse removeMember(Long eventId, Long memberId) {
+        Optional<Event> optionalEvent = eventRepository.findById(eventId);
+        if (optionalEvent.isPresent()) {
+            Event event = optionalEvent.get();
+            Optional<Member> optionalMember =  memberRepository.findById(memberId);
+            if (optionalMember.isPresent()){
+                Member memberToRemove = optionalMember.get();
+                Set<Member> eventMembers =  event.getMembers();
+                if(eventMembers.contains(memberToRemove)){
+                    eventMembers.remove(memberToRemove);
+                    event.setMembers(eventMembers);
+                    eventRepository.save(event);
+                    return revertRequestMapper.map(event);
+                }else{
+                    throw new InvalidMemberException("Member is not part of the event");
+                }
+            }else{
+                throw new EntityNotFoundException("Member not found with id: " + eventId);
+            }
+        }else {
+                throw new EntityNotFoundException("Event not found with id: " + eventId);
+        }
     }
 }

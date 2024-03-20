@@ -2,6 +2,7 @@ package com.ea.group.four.attendancesystem.controller;
 
 import com.ea.group.four.attendancesystem.domain.Event;
 import com.ea.group.four.attendancesystem.domain.Member;
+import com.ea.group.four.attendancesystem.exception.InvalidMemberException;
 import com.ea.group.four.attendancesystem.exception.InvalidScheduleException;
 import com.ea.group.four.attendancesystem.service.EventService;
 import com.ea.group.four.attendancesystem.service.response.EventResponse;
@@ -49,6 +50,19 @@ public class EventController extends BaseReadWriteController<EventResponse, Even
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding members to event: " + e.getMessage());
         }
 
+    }
+
+    @PutMapping("/members/{eventId}/remove/{memberId}")
+    public ResponseEntity<?> removeMemberFromEvent(@PathVariable Long eventId, @PathVariable Long memberId){
+        try{
+            EventResponse event = eventService.removeMember(eventId,memberId);
+            return ResponseEntity.ok(event);
+        }
+        catch (EntityNotFoundException | InvalidMemberException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding members to event: " + e.getMessage());
+        }
     }
 
     @GetMapping("{eventId}/attendance")
