@@ -6,17 +6,20 @@ import com.ea.group.four.attendancesystem.domain.ScanRecord;
 import com.ea.group.four.attendancesystem.domain.Scanner;
 import com.ea.group.four.attendancesystem.exception.InvalidMemberException;
 import com.ea.group.four.attendancesystem.exception.InvalidScheduleException;
+import com.ea.group.four.attendancesystem.exception.InvalidSessionException;
 import com.ea.group.four.attendancesystem.integration.jms.JMSSender;
 import com.ea.group.four.attendancesystem.repository.EventRepository;
 import com.ea.group.four.attendancesystem.repository.MemberRepository;
 import com.ea.group.four.attendancesystem.repository.ScannerRecordRepository;
 import com.ea.group.four.attendancesystem.service.EventService;
 import com.ea.group.four.attendancesystem.service.ScannerService;
+import com.ea.group.four.attendancesystem.service.SessionService;
 import com.ea.group.four.attendancesystem.service.mapper.EventReponseToEventMapper;
 import com.ea.group.four.attendancesystem.service.mapper.EventToEventReponseMapper;
 import com.ea.group.four.attendancesystem.service.mapper.ScannerRecordToScannerRecordResponseMapper;
 import com.ea.group.four.attendancesystem.service.response.EventResponse;
 import com.ea.group.four.attendancesystem.service.response.ScanRecordResponse;
+import com.ea.group.four.attendancesystem.service.response.SessionResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.miu.common.service.BaseReadWriteServiceImpl;
 import jakarta.persistence.EntityNotFoundException;
@@ -46,7 +49,8 @@ public class EventServiceImpl extends BaseReadWriteServiceImpl<EventResponse, Ev
     private ScannerRecordRepository scannerRecordRepository;
     @Autowired
     private MemberRepository memberRepository;
-
+    @Autowired
+    private SessionService sessionService;
     @Override
     public EventResponse create(EventResponse request) {
         Event event = requestMapper.map(request);
@@ -178,6 +182,17 @@ public class EventServiceImpl extends BaseReadWriteServiceImpl<EventResponse, Ev
             } else {
                 throw new EntityNotFoundException("Member not found with id: " + eventId);
             }
+        } else {
+            throw new EntityNotFoundException("Event not found with id: " + eventId);
+        }
+    }
+
+    @Override
+    public SessionResponse updateSession(Long eventId,SessionResponse sessionResponse ) throws InvalidSessionException{
+        Optional<Event> optionalEvent = eventRepository.findById(eventId);
+        if (optionalEvent.isPresent()) {
+            Event event = optionalEvent.get();
+            return  sessionService.updateSession(event,sessionResponse);
         } else {
             throw new EntityNotFoundException("Event not found with id: " + eventId);
         }

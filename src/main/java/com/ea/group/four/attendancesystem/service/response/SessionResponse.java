@@ -13,6 +13,5 @@ public class SessionResponse implements Serializable {
   private LocalDate sessionDate;
   private LocalTime startTime;
   private LocalTime endTime;
-
   private Long eventId;
 }
