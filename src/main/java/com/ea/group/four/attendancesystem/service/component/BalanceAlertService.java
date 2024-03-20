@@ -24,8 +24,8 @@ public class BalanceAlertService {
   @Scheduled(cron = "${alert.msg.cron.job}")
   public void alertMember() {
     memberAccountService.findAllValidAccount().forEach(memberAccount -> {
-      int balance = memberAccount.getAccount().getAccountType().getBalance();
-      if (memberAccount.getDefaultBalance() < (balance * 0.05)) {
+      int balance = memberAccount.getAccount().getAccountType().getDefaultBalance();
+      if (memberAccount.getBalance() < (balance * 0.05)) {
         ObjectMapper mapper = new ObjectMapper();
         String data = "";
         try {

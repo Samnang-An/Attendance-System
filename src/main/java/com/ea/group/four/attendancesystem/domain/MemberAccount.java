@@ -25,7 +25,7 @@ public class MemberAccount implements Serializable {
   private Member member;
   @ManyToOne(fetch = FetchType.LAZY)
   private Account account;
-  private int defaultBalance;
+  private int balance;
   private boolean enabled;
 
 }

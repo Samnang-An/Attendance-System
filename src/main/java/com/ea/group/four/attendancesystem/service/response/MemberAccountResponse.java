@@ -1,7 +1,5 @@
 package com.ea.group.four.attendancesystem.service.response;
 
-import com.ea.group.four.attendancesystem.domain.Account;
-import com.ea.group.four.attendancesystem.domain.Member;
 import java.io.Serializable;
 import lombok.Data;
 
@@ -12,6 +10,6 @@ public class MemberAccountResponse implements Serializable {
   private long memberAccountId;
   private MemberResponse member;
   private AccountResponse account;
-  private int defaultBalance;
+  private int balance;
   private boolean enabled;
 }
