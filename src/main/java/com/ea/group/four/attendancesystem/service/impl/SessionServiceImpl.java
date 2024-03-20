@@ -61,8 +61,8 @@ public class SessionServiceImpl extends
     @Override
     public SessionResponse findByValidSession(Long eventId, LocalDate sessionDate, LocalTime startTime,
                                               LocalTime endTime) {
-        return sessionRepository.findSessionByEventEventIdAndSessionDateAndStartTimeLessThanEqualAndEndTimeGreaterThanEqual(
-                eventId, sessionDate, startTime, endTime);
+        return sessionToSessionResponseMapper.map(sessionRepository.findSessionByEventEventIdAndSessionDateAndStartTimeLessThanEqualAndEndTimeGreaterThanEqual(
+                eventId, sessionDate, startTime, endTime));
     }
 
     @Override
