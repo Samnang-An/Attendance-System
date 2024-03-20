@@ -48,6 +48,7 @@ public class ScannerServiceImpl extends
         return convert(baseRepository.save(scanner));
     }
 
+    @Override
     public void delete(Long id) {
         Scanner scanner = baseRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
         List<ScanRecord> scanRecords = scannerRecordRepository.findByScanner(scanner);
