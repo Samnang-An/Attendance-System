@@ -106,7 +106,7 @@ public class SessionRepositoryTest {
         testEntityManager.persistAndFlush(event);
         testEntityManager.persistAndFlush(sessionExpected);
 
-        Session sessionFound = sessionRepository.findByEvent_EventIdAndSessionId(event.getEventId(),sessionExpected.getSessionId());
+        Session sessionFound = sessionRepository.findSessionByEventEventIdAndSessionId(event.getEventId(),sessionExpected.getSessionId());
         assertEquals(sessionExpected,sessionFound);
     }
 

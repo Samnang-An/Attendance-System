@@ -50,13 +50,15 @@ public class SessionServiceImpl extends
     }
 
     @Override
-    public SessionResponse updateSession(Long eventId, SessionResponse sessionResponse) {
-        Session session = sessionRepository.findSessionByEventEventIdAndSessionId(eventId, sessionResponse.getSessionId());
-        if(session == null){
+    public SessionResponse updateSession(Event event, SessionResponse sessionResponse) {
+        if(sessionRepository.findSessionByEventEventIdAndSessionId(event.getEventId(), sessionResponse.getSessionId()) == null){
             throw new InvalidSessionException("Invalid Session");
         }
         Session updatedSession = sessionResponseToSessionMapper.map(sessionResponse);
-        return sessionToSessionResponseMapper.map(sessionRepository.save(updatedSession));
+        updatedSession.setEvent(event);
+        SessionResponse updatedSessionResponse = sessionToSessionResponseMapper.map(sessionRepository.save(updatedSession));
+        updatedSessionResponse.setEventId(event.getEventId());
+        return updatedSessionResponse;
     }
 
     @Override

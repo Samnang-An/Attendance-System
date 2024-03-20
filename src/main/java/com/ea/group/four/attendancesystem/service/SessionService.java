@@ -14,7 +14,7 @@ public interface SessionService extends BaseReadWriteService<SessionResponse, Se
 
     SessionResponse findByValidSession(Long eventId, LocalDate sessionDate, LocalTime startTime, LocalTime endTime);
 
-    public SessionResponse updateSession(Long eventId, SessionResponse sessionResponse);
+    public SessionResponse updateSession(Event event, SessionResponse sessionResponse);
 
     public void deleteSession(SessionResponse sessionResponse);
 
