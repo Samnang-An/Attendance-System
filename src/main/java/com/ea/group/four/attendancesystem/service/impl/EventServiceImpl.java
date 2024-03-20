@@ -4,6 +4,7 @@ import com.ea.group.four.attendancesystem.domain.Event;
 import com.ea.group.four.attendancesystem.domain.Member;
 import com.ea.group.four.attendancesystem.domain.ScanRecord;
 import com.ea.group.four.attendancesystem.domain.Scanner;
+import com.ea.group.four.attendancesystem.exception.InvalidScheduleException;
 import com.ea.group.four.attendancesystem.integration.jms.JMSSender;
 import com.ea.group.four.attendancesystem.repository.EventRepository;
 import com.ea.group.four.attendancesystem.repository.ScannerRecordRepository;
@@ -19,6 +20,7 @@ import edu.miu.common.service.BaseReadWriteServiceImpl;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -49,23 +51,33 @@ public class EventServiceImpl extends
 
     @Autowired
     private ScannerRecordRepository scannerRecordRepository;
+    public static  final ObjectMapper objectMapper = new ObjectMapper();
+
 
     @Override
     public EventResponse create(EventResponse request) {
         Event event = requestMapper.map(request);
         Map<String, List<String>> schedule = event.getSchedule();
+        if(schedule.isEmpty()){
+            throw new InvalidScheduleException("Invalid Schedule");
+        }
+        try{
+            String scheduleJson = objectMapper.writeValueAsString(schedule);
+            event.setEventSchedule(scheduleJson);
+        }catch (Exception e) {
+            e.printStackTrace();
 
-        eventRepository.save(event);
-        String eventMessage = convertEventAndScheduleToString(event, schedule);
+        }
+        Event savedEvent  = eventRepository.save(event);
+        String eventMessage = convertEventAndScheduleToString(savedEvent, schedule);
         jmsSender.sendJMSMessage(eventMessage, "event.schedule.queue");
 
-        return revertRequestMapper.map(event);
+        return revertRequestMapper.map(savedEvent);
     }
 
 
     public String convertEventAndScheduleToString(Event event, Map<String, List<String>> schedule) {
         try {
-            ObjectMapper objectMapper = new ObjectMapper();
             String eventIdJson = objectMapper.writeValueAsString(event.getEventId());
             String scheduleJson = objectMapper.writeValueAsString(schedule);
             String eventMessage = eventIdJson + "###" + scheduleJson;

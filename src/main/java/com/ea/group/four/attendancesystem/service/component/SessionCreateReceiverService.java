@@ -43,14 +43,17 @@ public class SessionCreateReceiverService {
     public void createSessionsFromSchedule(String payload) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         String[] parts = payload.split("###");
-        long eventId = Long.parseLong(parts[0]);
+        Long eventId = Long.parseLong(parts[0]);
         String scheduleJson = parts[1];
 
         Event event = eventRepository.findByEventId(eventId);
-        Map<String, List<String>> schedule = objectMapper.readValue(
-                scheduleJson,
-                new TypeReference<Map<String, List<String>>>() {});
-        createSessionFromSchedule(event,schedule);
+
+
+            Map<String, List<String>> schedule = objectMapper.readValue(
+                    scheduleJson,
+                    new TypeReference<Map<String, List<String>>>() {});
+            createSessionFromSchedule(event,schedule);
+
     }
 
     public void createSessionFromSchedule(Event event, Map<String, List<String>> schedule){

@@ -2,6 +2,7 @@ package com.ea.group.four.attendancesystem.controller;
 
 import com.ea.group.four.attendancesystem.domain.Event;
 import com.ea.group.four.attendancesystem.domain.Member;
+import com.ea.group.four.attendancesystem.exception.InvalidScheduleException;
 import com.ea.group.four.attendancesystem.service.EventService;
 import com.ea.group.four.attendancesystem.service.response.EventResponse;
 import com.ea.group.four.attendancesystem.service.response.ScanRecordResponse;
@@ -25,8 +26,15 @@ public class EventController extends BaseReadWriteController<EventResponse, Even
 
     @PostMapping("/create")
     public ResponseEntity<?> create(@RequestBody EventResponse request){
-        EventResponse eventResponse = eventService.create(request);
-        return ResponseEntity.ok(eventResponse);
+        try{
+            EventResponse eventResponse = eventService.create(request);
+            return ResponseEntity.ok(eventResponse);
+        }catch (InvalidScheduleException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e);
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding members to event: " + e.getMessage());
+        }
+
 
     }
 
