@@ -1,7 +1,5 @@
 package com.ea.group.four.attendancesystem.service.response;
 
-import com.ea.group.four.attendancesystem.domain.Account;
-import com.ea.group.four.attendancesystem.domain.Member;
 import java.io.Serializable;
 import lombok.Data;
 

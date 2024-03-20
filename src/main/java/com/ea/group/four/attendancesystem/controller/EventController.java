@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/events")
@@ -33,7 +34,7 @@ public class EventController extends BaseReadWriteController<EventResponse, Even
         }catch (InvalidScheduleException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e);
         }catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding members to event: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error while creating event: " + e.getMessage());
         }
 
 
@@ -47,7 +48,20 @@ public class EventController extends BaseReadWriteController<EventResponse, Even
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding members to event: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error while adding members to event: " + e.getMessage());
+        }
+
+    }
+
+    @PatchMapping("/{eventId}/schedule")
+    public ResponseEntity<?> updateSchedule(@PathVariable Long eventId, @RequestBody Map<String,List<String>> schedule){
+        try{
+            EventResponse eventResponse = eventService.updateSchedule(eventId,schedule);
+            return ResponseEntity.ok(eventResponse);
+        }catch (InvalidScheduleException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e);
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error while adding members to event: " + e.getMessage());
         }
 
     }
@@ -61,7 +75,7 @@ public class EventController extends BaseReadWriteController<EventResponse, Even
         catch (EntityNotFoundException | InvalidMemberException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding members to event: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error while removing member from event: " + e.getMessage());
         }
     }
 
@@ -73,7 +87,7 @@ public class EventController extends BaseReadWriteController<EventResponse, Even
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding members to event: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error while getting attendance of event: " + e.getMessage());
         }
 
     }

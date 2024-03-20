@@ -22,62 +22,51 @@ import edu.miu.common.service.BaseReadWriteServiceImpl;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
 @Service
-public class EventServiceImpl extends
-        BaseReadWriteServiceImpl<EventResponse, Event, Long> implements
-        EventService {
+public class EventServiceImpl extends BaseReadWriteServiceImpl<EventResponse, Event, Long> implements EventService {
 
 
+    public static final ObjectMapper objectMapper = new ObjectMapper();
     @Autowired
     private EventRepository eventRepository;
-
     @Autowired
     private EventToEventReponseMapper revertRequestMapper;
-
-
     @Autowired
     private EventReponseToEventMapper requestMapper;
-
     @Autowired
     private ScannerRecordToScannerRecordResponseMapper revertScanRecordMapper;
-
     @Autowired
     private JMSSender jmsSender;
-
     @Autowired
     private ScannerService scannerService;
-
     @Autowired
     private ScannerRecordRepository scannerRecordRepository;
-
     @Autowired
     private MemberRepository memberRepository;
-
-    public static  final ObjectMapper objectMapper = new ObjectMapper();
-
 
     @Override
     public EventResponse create(EventResponse request) {
         Event event = requestMapper.map(request);
         Map<String, List<String>> schedule = event.getSchedule();
-        if(schedule.isEmpty()){
+        if (schedule.isEmpty()) {
             throw new InvalidScheduleException("Invalid Schedule");
         }
-        try{
+        try {
             String scheduleJson = objectMapper.writeValueAsString(schedule);
             event.setEventSchedule(scheduleJson);
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
 
         }
-        Event savedEvent  = eventRepository.save(event);
-        String eventMessage = convertEventAndScheduleToString(savedEvent, schedule);
-        jmsSender.sendJMSMessage(eventMessage, "event.schedule.queue");
-
+        Event savedEvent = eventRepository.save(event);
+        Optional<Event> verifySavedEvent = eventRepository.findById(savedEvent.getEventId());
+        if (verifySavedEvent.isPresent()) {
+            String eventMessage = convertEventAndScheduleToString(savedEvent, schedule);
+            jmsSender.sendJMSMessage(eventMessage, "event.schedule.queue");
+        }
         return revertRequestMapper.map(savedEvent);
     }
 
@@ -141,27 +130,56 @@ public class EventServiceImpl extends
     }
 
     @Override
+    public EventResponse updateSchedule(Long eventId, Map<String, List<String>> schedule) {
+        Optional<Event> optionalEvent = eventRepository.findById(eventId);
+        if (optionalEvent.isPresent()) {
+            Event event = optionalEvent.get();
+            if (schedule.isEmpty()) {
+                throw new InvalidScheduleException("Invalid Schedule");
+            } else {
+
+                try {
+                    String scheduleJson = objectMapper.writeValueAsString(schedule);
+                    event.setEventSchedule(scheduleJson);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                Event savedEvent = eventRepository.save(event);
+                Optional<Event> verifySavedEvent = eventRepository.findById(savedEvent.getEventId());
+                if (verifySavedEvent.isPresent()){
+                String eventMessage = convertEventAndScheduleToString(savedEvent, schedule);
+                jmsSender.sendJMSMessage(eventMessage, "event.schedule.queue");
+                }
+                return revertRequestMapper.map(savedEvent);
+            }
+
+        } else {
+            throw new EntityNotFoundException("Event not found with id: " + eventId);
+        }
+    }
+
+    @Override
     public EventResponse removeMember(Long eventId, Long memberId) {
         Optional<Event> optionalEvent = eventRepository.findById(eventId);
         if (optionalEvent.isPresent()) {
             Event event = optionalEvent.get();
-            Optional<Member> optionalMember =  memberRepository.findById(memberId);
-            if (optionalMember.isPresent()){
+            Optional<Member> optionalMember = memberRepository.findById(memberId);
+            if (optionalMember.isPresent()) {
                 Member memberToRemove = optionalMember.get();
-                Set<Member> eventMembers =  event.getMembers();
-                if(eventMembers.contains(memberToRemove)){
+                Set<Member> eventMembers = event.getMembers();
+                if (eventMembers.contains(memberToRemove)) {
                     eventMembers.remove(memberToRemove);
                     event.setMembers(eventMembers);
                     eventRepository.save(event);
                     return revertRequestMapper.map(event);
-                }else{
+                } else {
                     throw new InvalidMemberException("Member is not part of the event");
                 }
-            }else{
+            } else {
                 throw new EntityNotFoundException("Member not found with id: " + eventId);
             }
-        }else {
-                throw new EntityNotFoundException("Event not found with id: " + eventId);
+        } else {
+            throw new EntityNotFoundException("Event not found with id: " + eventId);
         }
     }
 }
