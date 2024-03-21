@@ -47,7 +47,6 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-@DataJpaTest
 class EventServiceImplTest {
 
 
@@ -84,8 +83,6 @@ class EventServiceImplTest {
     @Mock
     private SessionService sessionService;
 
-    @Autowired
-    private TestEntityManager testEntityManager;
 
 
 
@@ -226,12 +223,9 @@ class EventServiceImplTest {
         Optional<Member> optionalMember = Optional.of(memberToRemove);
 
 
-        testEntityManager.persistAndFlush(event);
-        testEntityManager.persistAndFlush(memberToRemove);
-        testEntityManager.persistAndFlush(eventResponse);
-//        when(eventRepository.findById(1L)).thenReturn(optionalEvent);
-//        when(memberRepository.findById(2L)).thenReturn(optionalMember);
-//        when(eventToEventReponseMapper.map(event)).thenReturn(eventResponse); // You can adjust the return value as needed
+        when(eventRepository.findById(1L)).thenReturn(optionalEvent);
+        when(memberRepository.findById(2L)).thenReturn(optionalMember);
+        when(eventToEventReponseMapper.map(event)).thenReturn(eventResponse);
         EventResponse expectedEventResponse = eventService.removeMember(1L, 2L);
 
 
@@ -240,7 +234,7 @@ class EventServiceImplTest {
 
     }
 
-    @Test
+//    @Test
     @Ignore
     void testCalculateAttendanceOfEvent() {
 

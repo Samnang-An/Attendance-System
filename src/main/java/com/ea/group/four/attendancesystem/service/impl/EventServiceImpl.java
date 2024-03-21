@@ -183,7 +183,7 @@ public class EventServiceImpl extends BaseReadWriteServiceImpl<EventResponse, Ev
 
     @Override
     public SessionResponse addSession(Long eventId, SessionResponse sessionResponse) throws  InvalidSessionException {
-        Optional<Event> optionalEvent = eventRepository.findById(eventId);
+         Optional<Event> optionalEvent = eventRepository.findById(eventId);
         if (optionalEvent.isPresent()) {
             Event event = optionalEvent.get();
             return  sessionService.addSession(event,sessionResponse);
