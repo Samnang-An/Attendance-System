@@ -1,6 +1,5 @@
 package com.ea.group.four.attendancesystem.controller;
 
-import com.azure.core.annotation.Delete;
 import com.ea.group.four.attendancesystem.domain.Scanner;
 import com.ea.group.four.attendancesystem.exception.InvalidMemberException;
 import com.ea.group.four.attendancesystem.exception.InvalidSessionException;
@@ -22,6 +21,14 @@ public class ScannerController extends BaseReadWriteController<ScannerResponse, 
 
     @Autowired
     private ScannerRecordService scannerRecordService;
+
+    public ScannerController() {
+
+    }
+
+    public ScannerController(ScannerService scannerService) {
+        this.scannerService = scannerService;
+    }
 
     @PostMapping
     public ResponseEntity<?> create(@RequestBody ScannerResponse request) {
@@ -56,8 +63,5 @@ public class ScannerController extends BaseReadWriteController<ScannerResponse, 
     public ResponseEntity<?> customDelete(@PathVariable Long id){
         return ResponseEntity.ok(scannerRecordService.customDelete(id));
     }
-
-
-
 
 }
