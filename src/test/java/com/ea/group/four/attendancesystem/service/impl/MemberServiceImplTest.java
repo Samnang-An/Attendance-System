@@ -124,7 +124,6 @@ class MemberServiceImplTest {
         assertEquals(expectedScanRecords.size(), actualScanRecords.size());
     }
 
-
     /**
      * Method under test: {@link MemberServiceImpl#addRoleByMemberId(Long, Long)}
      */
@@ -288,6 +287,4 @@ class MemberServiceImplTest {
         assertEquals(1L, roleResponse2.getRoleId());
         assertEquals(events, roleResponse2.getAccounts());
     }
-
 }
-

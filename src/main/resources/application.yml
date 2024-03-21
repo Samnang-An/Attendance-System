@@ -10,9 +10,16 @@ server:
     enabled: false
 spring:
   security:
-    user:
-      name: miu
-      password: password
+#    user:
+#      name: miu
+#      password: password
+
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 430488377001-985lu1m32oc2n1vqt1fhgdlj9auf8394.apps.googleusercontent.com
+            client-secret: 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
   application:
     name: attendance-server
   datasource:
