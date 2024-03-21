@@ -34,7 +34,6 @@ public class Event implements Serializable {
   private String eventSchedule;
 
 
-
   @ManyToMany
   private Set<Member> members;
 

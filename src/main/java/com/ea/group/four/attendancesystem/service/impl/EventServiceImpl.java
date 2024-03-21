@@ -23,13 +23,16 @@ import com.ea.group.four.attendancesystem.service.response.SessionResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.miu.common.service.BaseReadWriteServiceImpl;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 @Service
+@AllArgsConstructor
 public class EventServiceImpl extends BaseReadWriteServiceImpl<EventResponse, Event, Long> implements EventService {
+
 
 
     public static final ObjectMapper objectMapper = new ObjectMapper();
@@ -180,7 +183,7 @@ public class EventServiceImpl extends BaseReadWriteServiceImpl<EventResponse, Ev
 
     @Override
     public SessionResponse addSession(Long eventId, SessionResponse sessionResponse) throws  InvalidSessionException {
-        Optional<Event> optionalEvent = eventRepository.findById(eventId);
+         Optional<Event> optionalEvent = eventRepository.findById(eventId);
         if (optionalEvent.isPresent()) {
             Event event = optionalEvent.get();
             return  sessionService.addSession(event,sessionResponse);
