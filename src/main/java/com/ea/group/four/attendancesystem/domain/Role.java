@@ -1,10 +1,7 @@
 package com.ea.group.four.attendancesystem.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
+
 import java.io.Serializable;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -23,7 +20,7 @@ public class Role implements Serializable {
   private long roleId;
   private String name;
 
-  @ManyToMany
+  @ManyToMany(cascade = CascadeType.MERGE)
   private List<Account> accounts;
 
 }

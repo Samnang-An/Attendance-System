@@ -10,9 +10,16 @@ server:
     enabled: false
 spring:
   security:
-    user:
-      name: miu
-      password: password
+#    user:
+#      name: miu
+#      password: password
+
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 430488377001-985lu1m32oc2n1vqt1fhgdlj9auf8394.apps.googleusercontent.com
+            client-secret: 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
   application:
     name: attendance-server
   datasource:
@@ -26,6 +33,18 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
+  mail:
+    host: smtp.gmail.com
+    username: 'sa4159348@gmail.com'
+    port: '587'
+    enabled: false
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: 'true'
+          auth: 'true'
+    password: 'fsmy yzpb oveg nzfc'
 logging:
   level:
     root: INFO

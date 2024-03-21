@@ -1,9 +1,11 @@
 package com.ea.group.four.attendancesystem.controller;
 
-import com.azure.core.annotation.Delete;
 import com.ea.group.four.attendancesystem.domain.Scanner;
+import com.ea.group.four.attendancesystem.exception.InvalidMemberException;
+import com.ea.group.four.attendancesystem.exception.InvalidSessionException;
 import com.ea.group.four.attendancesystem.service.ScannerRecordService;
 import com.ea.group.four.attendancesystem.service.ScannerService;
+import com.ea.group.four.attendancesystem.service.request.ScanRecordRequest;
 import com.ea.group.four.attendancesystem.service.response.ScanRecordResponse;
 import com.ea.group.four.attendancesystem.service.response.ScannerResponse;
 import edu.miu.common.controller.BaseReadWriteController;
@@ -19,6 +21,14 @@ public class ScannerController extends BaseReadWriteController<ScannerResponse, 
 
     @Autowired
     private ScannerRecordService scannerRecordService;
+
+    public ScannerController() {
+
+    }
+
+    public ScannerController(ScannerService scannerService) {
+        this.scannerService = scannerService;
+    }
 
     @PostMapping
     public ResponseEntity<?> create(@RequestBody ScannerResponse request) {
@@ -38,17 +48,20 @@ public class ScannerController extends BaseReadWriteController<ScannerResponse, 
 
     @PostMapping("/{scannerCode}/records")
     public ResponseEntity<?> createScannerRecord(@PathVariable Long scannerCode,
-                                    @RequestBody ScanRecordResponse request) {
-        request.getScanner().setScannerId(scannerCode);
-        return ResponseEntity.ok(scannerRecordService.create(request));
+                                    @RequestBody ScanRecordRequest request) {
+        try{
+
+        return ResponseEntity.ok(scannerRecordService.customCreate(scannerCode, request));
+        }catch (InvalidMemberException | InvalidSessionException e){
+            return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 
     @DeleteMapping("/{id}/records")
     public ResponseEntity<?> customDelete(@PathVariable Long id){
         return ResponseEntity.ok(scannerRecordService.customDelete(id));
     }
-
-
-
 
 }
