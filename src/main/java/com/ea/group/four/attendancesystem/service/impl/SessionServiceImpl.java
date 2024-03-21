@@ -80,7 +80,9 @@ public class SessionServiceImpl extends
         List<Session> sessionList = sessionRepository.findAllByEventEventId(eventId);
         List<SessionResponse> sessionResponseList = new ArrayList<>();
         for(Session session: sessionList){
-            sessionResponseList.add(sessionToSessionResponseMapper.map(session));
+                   SessionResponse tempResponse = sessionToSessionResponseMapper.map(session);
+                   tempResponse.setEventId(eventId);
+            sessionResponseList.add(tempResponse);
         }
         return sessionResponseList;
     }

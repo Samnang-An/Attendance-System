@@ -21,6 +21,7 @@ public interface EventService extends BaseReadWriteService<EventResponse, Event,
     public EventResponse addMembersToEvent(Long eventId, List<Member> members);
     public EventResponse removeMember(Long eventId,Long memberId);
     public List<ScanRecordResponse> calculateAttendanceOfEvent(Long eventId);
+    public List<SessionResponse> getAllEventSessions(Long eventId);
 
 
 }

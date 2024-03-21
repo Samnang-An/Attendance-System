@@ -137,6 +137,11 @@ public class EventServiceImpl extends BaseReadWriteServiceImpl<EventResponse, Ev
     }
 
     @Override
+    public List<SessionResponse> getAllEventSessions(Long eventId) {
+        return sessionService.findAllSessionsInEvent(eventId);
+    }
+
+    @Override
     public EventResponse updateSchedule(Long eventId, Map<String, List<String>> schedule) {
         Optional<Event> optionalEvent = eventRepository.findById(eventId);
         if (optionalEvent.isPresent()) {
