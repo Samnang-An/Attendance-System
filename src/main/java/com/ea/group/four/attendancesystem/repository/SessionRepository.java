@@ -17,4 +17,6 @@ public interface SessionRepository extends BaseRepository<Session, Long> {
 
     Session findSessionByEventEventIdAndSessionId(Long eventId,Long sessionId);
 
+    List<Session> findAllByEventEventId(Long eventId);
+
 }
