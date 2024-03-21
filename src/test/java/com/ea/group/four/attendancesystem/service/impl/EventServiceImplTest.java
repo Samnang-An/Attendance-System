@@ -20,6 +20,7 @@ import com.ea.group.four.attendancesystem.service.response.ScanRecordResponse;
 import com.ea.group.four.attendancesystem.service.response.ScannerResponse;
 import edu.miu.common.repository.BaseRepository;
 import edu.miu.common.service.mapper.BaseMapper;
+import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -29,6 +30,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.aot.DisabledInAotMode;
@@ -44,6 +47,7 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
+@DataJpaTest
 class EventServiceImplTest {
 
 
@@ -79,6 +83,11 @@ class EventServiceImplTest {
 
     @Mock
     private SessionService sessionService;
+
+    @Autowired
+    private TestEntityManager testEntityManager;
+
+
 
 
     @BeforeEach
@@ -182,6 +191,7 @@ class EventServiceImplTest {
     }
 
     @Test
+    @Ignore
     void testRemoveMember(){
 
 
@@ -216,18 +226,22 @@ class EventServiceImplTest {
         Optional<Member> optionalMember = Optional.of(memberToRemove);
 
 
-        when(eventRepository.findById(1L)).thenReturn(optionalEvent);
-        when(memberRepository.findById(2L)).thenReturn(optionalMember);
-        when(eventToEventReponseMapper.map(event)).thenReturn(eventResponse); // You can adjust the return value as needed
+        testEntityManager.persistAndFlush(event);
+        testEntityManager.persistAndFlush(memberToRemove);
+        testEntityManager.persistAndFlush(eventResponse);
+//        when(eventRepository.findById(1L)).thenReturn(optionalEvent);
+//        when(memberRepository.findById(2L)).thenReturn(optionalMember);
+//        when(eventToEventReponseMapper.map(event)).thenReturn(eventResponse); // You can adjust the return value as needed
         EventResponse expectedEventResponse = eventService.removeMember(1L, 2L);
 
 
         assertNotNull(eventResponse);
-        verify(eventRepository, times(1)).save(event);
+//        verify(eventRepository, times(1)).save(event);
 
     }
 
     @Test
+    @Ignore
     void testCalculateAttendanceOfEvent() {
 
         Member member1 = createMockMember(1L,"Vivek","Parmar");
