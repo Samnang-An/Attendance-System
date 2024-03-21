@@ -1,4 +1,5 @@
 package com.ea.group.four.attendancesystem.controller;
+
 import com.ea.group.four.attendancesystem.domain.Account;
 import com.ea.group.four.attendancesystem.service.ScannerRecordService;
 import com.ea.group.four.attendancesystem.service.response.AccountResponse;
@@ -16,6 +17,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/accounts")
 public class AccountController extends BaseReadWriteController<AccountResponse, Account, Long> {
 
+  @Autowired
+  ScannerRecordService scannerRecordService;
 
+  @GetMapping("/{accountTypeId}/attendance/{fromDate}/{toDate}")
+  public ResponseEntity<?> getRecords(@PathVariable long accountTypeId,
+      @PathVariable String fromDate,
+      @PathVariable String toDate) {
+    List<ScanRecordResponse> records = scannerRecordService.findByAccountBetweenDates(accountTypeId,
+        fromDate, toDate);
+    return ResponseEntity.ok(records);
+  }
 
 }

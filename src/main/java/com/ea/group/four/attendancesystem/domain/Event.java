@@ -12,9 +12,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
-
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -32,6 +29,11 @@ public class Event implements Serializable {
 
   @Transient
   private Map<String,List<String>> schedule  = new HashMap<>();
+
+
+  private String eventSchedule;
+
+
 
   @ManyToMany
   private Set<Member> members;

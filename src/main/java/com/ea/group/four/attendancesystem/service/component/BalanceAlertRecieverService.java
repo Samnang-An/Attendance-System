@@ -15,7 +15,7 @@ public class BalanceAlertRecieverService {
     MemberAccount memberAccount = mapper.readValue(payload, MemberAccount.class);
     System.out.println(
         "Alert :" + memberAccount.getMember().getMemberId() + " ; " + memberAccount.getMember().getEmail() + " ; " + memberAccount.getAccount()
-            .getAccountType().getDefaultBalance() + " ; " + memberAccount.getBalance() + " ; "
+            .getAccountType().getBalance() + " ; " + memberAccount.getDefaultBalance() + " ; "
             + memberAccount.getAccount().getName());
   }
 
