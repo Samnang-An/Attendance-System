@@ -20,6 +20,12 @@ public class AccountController extends BaseReadWriteController<AccountResponse, 
   @Autowired
   ScannerRecordService scannerRecordService;
 
+  public AccountController() {
+  }
+  public AccountController(ScannerRecordService scannerRecordService) {
+    this.scannerRecordService = scannerRecordService;
+  }
+
   @GetMapping("/{accountTypeId}/attendance/{fromDate}/{toDate}")
   public ResponseEntity<?> getRecords(@PathVariable long accountTypeId,
       @PathVariable String fromDate,
