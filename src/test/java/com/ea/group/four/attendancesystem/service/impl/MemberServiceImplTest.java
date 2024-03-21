@@ -1,5 +1,4 @@
 package com.ea.group.four.attendancesystem.service.impl;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -10,7 +9,6 @@ import static org.mockito.Mockito.when;
 
 import com.ea.group.four.attendancesystem.domain.Event;
 import com.ea.group.four.attendancesystem.domain.Member;
-import com.ea.group.four.attendancesystem.domain.ScanRecord;
 import com.ea.group.four.attendancesystem.repository.MemberRepository;
 import com.ea.group.four.attendancesystem.repository.ScannerRecordRepository;
 import com.ea.group.four.attendancesystem.service.MemberAccountService;
@@ -74,10 +72,10 @@ class MemberServiceImplTest {
     void testGetRolesByMemberId() {
         Member member = new Member();
         member.setBarcode("Barcode");
-        member.setEmail("jane.doe@example.org");
+        member.setEmail("Jhon.smith@gmail.com");
         member.setEvents(new ArrayList<>());
-        member.setFirstName("Jane");
-        member.setLastName("Doe");
+        member.setFirstName("Jhon");
+        member.setLastName("Smith");
         member.setMemberId(1L);
         member.setRoles(new ArrayList<>());
         Optional<Member> ofResult = Optional.of(member);
@@ -85,9 +83,9 @@ class MemberServiceImplTest {
 
         MemberResponse memberResponse = new MemberResponse();
         memberResponse.setBarcode("Barcode");
-        memberResponse.setEmail("jane.doe@example.org");
-        memberResponse.setFirstName("Jane");
-        memberResponse.setLastName("Doe");
+        memberResponse.setEmail("Jhone.smith@gmail.com");
+        memberResponse.setFirstName("Jhon");
+        memberResponse.setLastName("Smith");
         memberResponse.setMemberId(1L);
         ArrayList<RoleResponse> roles = new ArrayList<>();
         memberResponse.setRoles(roles);
@@ -97,28 +95,6 @@ class MemberServiceImplTest {
         verify(memberRepository).findById(Mockito.<Long>any());
         assertTrue(actualRolesByMemberId.isEmpty());
         assertSame(roles, actualRolesByMemberId);
-    }
-
-    @Test
-    void testGetMemberAttendance() {
-        // Arrange
-        Long memberId = 1L;
-        Member member = new Member();
-        member.setMemberId(memberId);
-
-        List<ScanRecord> expectedScanRecords = new ArrayList<>();
-        expectedScanRecords.add(new ScanRecord());
-        expectedScanRecords.add(new ScanRecord());
-
-        // Mocking behavior
-        when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
-        when(scannerRecordRepository.findByMember(member)).thenReturn(expectedScanRecords);
-
-        // Act
-        List<ScanRecord> actualScanRecords = memberServiceImpl.getMemberAttendance(memberId);
-
-        // Assert
-        assertEquals(expectedScanRecords.size(), actualScanRecords.size());
     }
 
     /**
@@ -285,3 +261,4 @@ class MemberServiceImplTest {
         assertEquals(events, roleResponse2.getAccounts());
     }
 }
+

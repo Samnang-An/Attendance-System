@@ -14,4 +14,5 @@ public class RoleResponse implements Serializable {
   private String name;
   private List<AccountResponse> accounts = new ArrayList<>();
 
+
 }

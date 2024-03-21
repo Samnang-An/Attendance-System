@@ -22,11 +22,11 @@ public class MemberController extends BaseReadWriteController<MemberResponse, Me
     @Autowired
     MemberService memberService;
 
-    MemberController() {
+    public MemberController() {
 
     }
 
-    MemberController(MemberService memberService) {
+    public MemberController(MemberService memberService) {
         this.memberService = memberService;
     }
 
