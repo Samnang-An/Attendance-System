@@ -28,7 +28,7 @@ public class Session implements Serializable {
   private LocalTime startTime;
   private LocalTime endTime;
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "event_id")
+  @JoinColumn(name = "event_id",nullable = false)
   @JsonBackReference
   private Event event;
 

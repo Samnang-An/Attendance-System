@@ -6,6 +6,7 @@ import com.ea.group.four.attendancesystem.service.response.SessionResponse;
 import edu.miu.common.service.BaseReadWriteService;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 
 public interface SessionService extends BaseReadWriteService<SessionResponse, Session, Long> {
@@ -17,5 +18,7 @@ public interface SessionService extends BaseReadWriteService<SessionResponse, Se
     public SessionResponse updateSession(Event event, SessionResponse sessionResponse);
 
     public void deleteSession(SessionResponse sessionResponse);
+
+    public List<SessionResponse> findAllSessionsInEvent(Long eventId);
 
 }
