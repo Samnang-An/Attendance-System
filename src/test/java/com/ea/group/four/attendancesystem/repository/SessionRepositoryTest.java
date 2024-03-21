@@ -2,12 +2,12 @@ package com.ea.group.four.attendancesystem.repository;
 
 import com.ea.group.four.attendancesystem.domain.Event;
 import com.ea.group.four.attendancesystem.domain.Session;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -16,7 +16,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @DataJpaTest
 public class SessionRepositoryTest {
     @Autowired
@@ -26,18 +26,18 @@ public class SessionRepositoryTest {
     private TestEntityManager testEntityManager;
 
     @Test
-    public void findSessionByEventIdAndSessionIDAndTimeTest(){
-        Event event =  new Event();
+    public void findSessionByEventIdAndSessionIDAndTimeTest() {
+        Event event = new Event();
         event.setName("Enterprise Architecture");
         event.setDescription(" EA taught by Prof Payman Salek");
-        event.setStartDate(LocalDate.of(2024,5,1));
-        event.setEndDate(LocalDate.of(2024,6,1));
+        event.setStartDate(LocalDate.of(2024, 5, 1));
+        event.setEndDate(LocalDate.of(2024, 6, 1));
         event.setSchedule(new HashMap<>());
 
         Session sessionExpected = new Session();
         sessionExpected.setSessionDate(LocalDate.now());
-        sessionExpected.setStartTime(LocalTime.of(10,0));
-        sessionExpected.setEndTime(LocalTime.of(12,30));
+        sessionExpected.setStartTime(LocalTime.of(10, 0));
+        sessionExpected.setEndTime(LocalTime.of(12, 30));
         sessionExpected.setEvent(event);
 
         testEntityManager.persistAndFlush(event);
@@ -46,20 +46,20 @@ public class SessionRepositoryTest {
         Session sessionFound = sessionRepository.findSessionByEventEventIdAndSessionDateAndStartTimeLessThanEqualAndEndTimeGreaterThanEqual(
                 event.getEventId(),
                 LocalDate.now(),
-                LocalTime.of(10,0),
-                LocalTime.of(12,30)
+                LocalTime.of(10, 0),
+                LocalTime.of(12, 30)
         );
-        assertEquals(sessionExpected,sessionFound);
+        assertEquals(sessionExpected, sessionFound);
 
     }
 
     @Test
-    public void  findAllSessionsByEventEventIdAndSessionDateGreaterThanEqualTest (){
-        Event event =  new Event();
+    public void findAllSessionsByEventEventIdAndSessionDateGreaterThanEqualTest() {
+        Event event = new Event();
         event.setName("Enterprise Architecture");
         event.setDescription(" EA taught by Prof Payman Salek");
-        event.setStartDate(LocalDate.of(2024,5,1));
-        event.setEndDate(LocalDate.of(2024,6,1));
+        event.setStartDate(LocalDate.of(2024, 5, 1));
+        event.setEndDate(LocalDate.of(2024, 6, 1));
         event.setSchedule(new HashMap<>());
 
         LocalDate currentDate = LocalDate.now();
@@ -80,34 +80,34 @@ public class SessionRepositoryTest {
         testEntityManager.persistAndFlush(session1);
         testEntityManager.persistAndFlush(session2);
 
-        List<Session> sessions = List.of(session1,session2);
+        List<Session> sessions = List.of(session1, session2);
 
         List<Session> foundSessions = sessionRepository.findAllSessionsByEventEventIdAndSessionDateGreaterThanEqual(event.getEventId(), currentDate);
 
-        assertEquals(sessions.size(),foundSessions.size());
+        assertEquals(sessions.size(), foundSessions.size());
 
     }
 
     @Test
-    public void findByEvent_EventIdAndSessionIdTest(){
-        Event event =  new Event();
+    public void findByEvent_EventIdAndSessionIdTest() {
+        Event event = new Event();
         event.setName("Enterprise Architecture");
         event.setDescription(" EA taught by Prof Payman Salek");
-        event.setStartDate(LocalDate.of(2024,5,1));
-        event.setEndDate(LocalDate.of(2024,6,1));
+        event.setStartDate(LocalDate.of(2024, 5, 1));
+        event.setEndDate(LocalDate.of(2024, 6, 1));
         event.setSchedule(new HashMap<>());
 
         Session sessionExpected = new Session();
         sessionExpected.setSessionDate(LocalDate.now());
-        sessionExpected.setStartTime(LocalTime.of(10,0));
-        sessionExpected.setEndTime(LocalTime.of(12,30));
+        sessionExpected.setStartTime(LocalTime.of(10, 0));
+        sessionExpected.setEndTime(LocalTime.of(12, 30));
         sessionExpected.setEvent(event);
 
         testEntityManager.persistAndFlush(event);
         testEntityManager.persistAndFlush(sessionExpected);
 
-        Session sessionFound = sessionRepository.findSessionByEventEventIdAndSessionId(event.getEventId(),sessionExpected.getSessionId());
-        assertEquals(sessionExpected,sessionFound);
+        Session sessionFound = sessionRepository.findSessionByEventEventIdAndSessionId(event.getEventId(), sessionExpected.getSessionId());
+        assertEquals(sessionExpected, sessionFound);
     }
 
 }
