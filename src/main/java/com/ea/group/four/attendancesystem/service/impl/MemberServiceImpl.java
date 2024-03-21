@@ -36,8 +36,16 @@ public class MemberServiceImpl extends
   @Autowired
   private MemberAccountService memberAccountService;
 
+  MemberServiceImpl() {
 
-    @Override
+  }
+
+  MemberServiceImpl(MemberRepository memberRepository, ScannerRecordRepository scannerRecordRepository) {
+    this.memberRepository = memberRepository;
+    this.scanRecordRepository = scannerRecordRepository;
+  }
+
+  @Override
   public MemberResponse create(MemberResponse memberResponse) {
     MemberResponse member = super.create(memberResponse);
     List<AccountResponse> accounts = member.getRoles().stream().map(RoleResponse::getAccounts)
