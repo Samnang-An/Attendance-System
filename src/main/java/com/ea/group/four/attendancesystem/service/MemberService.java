@@ -7,6 +7,7 @@ import com.ea.group.four.attendancesystem.service.response.ScanRecordDTO;
 import com.ea.group.four.attendancesystem.service.response.RoleResponse;
 import edu.miu.common.service.BaseReadWriteService;
 import java.util.List;
+import java.util.Optional;
 
 public interface MemberService extends BaseReadWriteService<MemberResponse, Member, Long> {
     public List<ScanRecord> getMemberAttendance(Long memberId);

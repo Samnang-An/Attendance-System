@@ -10,7 +10,9 @@ import static org.mockito.Mockito.when;
 
 import com.ea.group.four.attendancesystem.domain.Event;
 import com.ea.group.four.attendancesystem.domain.Member;
+
 import com.ea.group.four.attendancesystem.domain.ScanRecord;
+
 import com.ea.group.four.attendancesystem.repository.MemberRepository;
 import com.ea.group.four.attendancesystem.repository.ScannerRecordRepository;
 import com.ea.group.four.attendancesystem.service.MemberAccountService;
@@ -99,6 +101,7 @@ class MemberServiceImplTest {
         assertSame(roles, actualRolesByMemberId);
     }
 
+
     @Test
     void testGetMemberAttendance() {
         // Arrange
@@ -120,6 +123,7 @@ class MemberServiceImplTest {
         // Assert
         assertEquals(expectedScanRecords.size(), actualScanRecords.size());
     }
+
 
     /**
      * Method under test: {@link MemberServiceImpl#addRoleByMemberId(Long, Long)}
@@ -284,4 +288,6 @@ class MemberServiceImplTest {
         assertEquals(1L, roleResponse2.getRoleId());
         assertEquals(events, roleResponse2.getAccounts());
     }
+
 }
+

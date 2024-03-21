@@ -28,7 +28,7 @@ public class Member implements Serializable {
   private String lastName;
   private String barcode;
   private String email;
-  @OneToMany(cascade = CascadeType.PERSIST)
+  @OneToMany(cascade = CascadeType.MERGE)
   @JoinTable(name = "Member_Role")
   private List<Role> roles = new ArrayList<>();
 
