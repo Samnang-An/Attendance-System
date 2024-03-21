@@ -10,7 +10,9 @@ import static org.mockito.Mockito.when;
 
 import com.ea.group.four.attendancesystem.domain.Event;
 import com.ea.group.four.attendancesystem.domain.Member;
+
 import com.ea.group.four.attendancesystem.domain.ScanRecord;
+
 import com.ea.group.four.attendancesystem.repository.MemberRepository;
 import com.ea.group.four.attendancesystem.repository.ScannerRecordRepository;
 import com.ea.group.four.attendancesystem.service.MemberAccountService;
@@ -98,6 +100,7 @@ class MemberServiceImplTest {
         assertTrue(actualRolesByMemberId.isEmpty());
         assertSame(roles, actualRolesByMemberId);
     }
+
 
     @Test
     void testGetMemberAttendance() {
