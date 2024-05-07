@@ -11,6 +11,9 @@ import com.ea.group.four.attendancesystem.service.response.SessionResponse;
 import edu.miu.common.service.BaseReadWriteServiceImpl;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -72,5 +75,16 @@ public class SessionServiceImpl extends
         sessionRepository.delete(sessionResponseToSessionMapper.map(sessionResponse));
     }
 
+    @Override
+    public List<SessionResponse> findAllSessionsInEvent(Long eventId) {
+        List<Session> sessionList = sessionRepository.findAllByEventEventId(eventId);
+        List<SessionResponse> sessionResponseList = new ArrayList<>();
+        for(Session session: sessionList){
+                   SessionResponse tempResponse = sessionToSessionResponseMapper.map(session);
+                   tempResponse.setEventId(eventId);
+            sessionResponseList.add(tempResponse);
+        }
+        return sessionResponseList;
+    }
 
 }

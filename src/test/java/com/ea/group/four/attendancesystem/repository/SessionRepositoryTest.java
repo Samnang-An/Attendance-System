@@ -3,11 +3,12 @@ package com.ea.group.four.attendancesystem.repository;
 import com.ea.group.four.attendancesystem.domain.Event;
 import com.ea.group.four.attendancesystem.domain.Session;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.ContextConfiguration;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -16,7 +17,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = {SessionRepository.class})
+@EnableAutoConfiguration
+@EntityScan(basePackages = {"com.ea.group.four.attendancesystem.domain"})
 @DataJpaTest
 public class SessionRepositoryTest {
     @Autowired

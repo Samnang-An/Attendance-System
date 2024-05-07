@@ -67,6 +67,18 @@ public class EventController extends BaseReadWriteController<EventResponse, Even
         }
     }
 
+    @GetMapping("/{eventId}/session")
+    public ResponseEntity<?> getAllTheSession(@PathVariable Long eventId){
+        try{
+            return  ResponseEntity.ok(eventService.getAllEventSessions(eventId));
+
+        }catch (EntityNotFoundException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error while adding members to event: " + e.getMessage());
+        }
+    }
+
     @PostMapping("/{eventId}/session")
     public  ResponseEntity<?> addSession(@PathVariable Long eventId,@RequestBody SessionResponse sessionResponse){
         try{
